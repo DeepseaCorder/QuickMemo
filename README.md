@@ -1,6 +1,12 @@
 # QuickMemo
 퀵메모
 
-+ 목록1
-  + 목록 1-1
-    + 목록 1-1-1
++ DeepseaCoder
+  + Role
+    + UI/UX
+    + Front-End
+    + Web Server
++ Illion
+   + Role
+     + QA
+     + Coach
