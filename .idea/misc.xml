@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/QuickMemo/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.20677083333333332" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/QuickMemo/app/src/main/res/drawable-v24/main_top_card2.xml" value="0.38229166666666664" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/QuickMemo/app/src/main/res/drawable/ic_align_justify_solid.xml" value="0.17222222222222222" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/QuickMemo/app/src/main/res/drawable/ic_bars_solid.xml" value="0.20677083333333332" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/QuickMemo/app/src/main/res/drawable/ic_baseline_menu_open_24.xml" value="0.22135416666666666" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/QuickMemo/app/src/main/res/drawable/ic_bold_solid.xml" value="0.20677083333333332" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/QuickMemo/app/src/main/res/drawable/ic_clock_regular.xml" value="0.20677083333333332" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/QuickMemo/app/src/main/res/drawable/ic_launcher_background.xml" value="0.20677083333333332" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/QuickMemo/app/src/main/res/drawable/ic_lock_solid.xml" value="0.20677083333333332" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/QuickMemo/app/src/main/res/drawable/ic_outline_home_24.xml" value="0.2" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/QuickMemo/app/src/main/res/drawable/ic_palette_solid.xml" value="0.20677083333333332" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/QuickMemo/app/src/main/res/drawable/ic_search_solid.xml" value="0.20677083333333332" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/QuickMemo/app/src/main/res/drawable/ic_settings_solid.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/QuickMemo/app/src/main/res/drawable/ic_star_regular.xml" value="0.20677083333333332" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/QuickMemo/app/src/main/res/drawable/ic_strikethrough_solid.xml" value="0.20677083333333332" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/QuickMemo/app/src/main/res/drawable/ic_trash_alt_regular.xml" value="0.20677083333333332" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/QuickMemo/app/src/main/res/drawable/ic_underline_solid.xml" value="0.20677083333333332" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/QuickMemo/app/src/main/res/drawable/line1.xml" value="0.38229166666666664" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/QuickMemo/app/src/main/res/drawable/main_card.xml" value="0.33" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/QuickMemo/app/src/main/res/drawable/main_selected_navi_item_bright.xml" value="0.5" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/QuickMemo/app/src/main/res/drawable/main_top_card.xml" value="0.1" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/QuickMemo/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/QuickMemo/app/src/main/res/layout/activity_splash.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/QuickMemo/app/src/main/res/layout/main_card_item.xml" value="0.6914285714285714" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/QuickMemo/app/src/main/res/layout/main_drawer_custom.xml" value="0.22" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/QuickMemo/app/src/main/res/layout/main_drawer_select_set_item.xml" value="0.5" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/QuickMemo/app/src/main/res/layout/main_menu_header.xml" value="0.10131712259371833" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/QuickMemo/app/src/main/res/layout/main_top_card_item.xml" value="0.9" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/QuickMemo/app/src/main/res/layout/main_top_card_item2.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/QuickMemo/app/src/main/res/layout/main_top_card_item_important.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/QuickMemo/app/src/main/res/layout/menu_header.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/QuickMemo/app/src/main/res/menu/main_navi_menu.xml" value="0.36614583333333334" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.9" />
+      </ProjectState>
+    </option>
+  </component>
+</project>
