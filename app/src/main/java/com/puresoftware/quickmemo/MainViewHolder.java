@@ -50,6 +50,8 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
                 int position = getAdapterPosition(); // 포지션 가져오기
                 Log.i(TAG, position + "번 위치 입력");
                 Log.i(TAG, "git_test 로그");
+
+                // 포지션 값
                 if (position != RecyclerView.NO_POSITION) {
                     Log.i(TAG, tvTitleLeft.getText().toString());
                     Log.i(TAG, tvTitleRight.getText().toString());
