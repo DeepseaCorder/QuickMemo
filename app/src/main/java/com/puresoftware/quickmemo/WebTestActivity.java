@@ -56,6 +56,8 @@ public class WebTestActivity extends AppCompatActivity {
 
 //            success => 로그인성공 페이지
 //                    fail => 로그인실패 페이지
+
+            // 깃허브 응답 테스트
         }
     };
 }
