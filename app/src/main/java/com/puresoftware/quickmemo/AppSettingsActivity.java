@@ -12,6 +12,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.util.Log;
+import android.widget.Toast;
 
 public class AppSettingsActivity extends PreferenceActivity {
 
@@ -30,10 +31,12 @@ public class AppSettingsActivity extends PreferenceActivity {
                 intentGo(SettingsFloatingActivity.class);
                 break;
 
-//            case "key mode":
-//                break;
+            case "key mode":
+                Toast.makeText(AppSettingsActivity.this, "현재 기능을 이용하실 수 없습니다.", Toast.LENGTH_SHORT).show();
+                break;
 
             case "login":
+                intentGo(LoginActivity.class);
 
                 break;
 
@@ -42,6 +45,7 @@ public class AppSettingsActivity extends PreferenceActivity {
 
             case "download":
                 break;
+
         }
         return false;
     }

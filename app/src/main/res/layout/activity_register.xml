@@ -38,7 +38,7 @@
             android:orientation="horizontal">
 
             <CheckBox
-                android:id="@+id/cb_register_activity_personal"
+                android:id="@+id/cb_register_activity_personal_privacy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="개인정보 처리방침"
@@ -70,7 +70,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline5">
 
         <EditText
-            android:id="@+id/_register_activity_id"
+            android:id="@+id/edt_register_activity_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="#26000000"
@@ -83,19 +83,19 @@
             tools:inputType="textWebEmailAddress" />
 
         <EditText
-            android:id="@+id/_register_activity_birth"
+            android:id="@+id/edt_register_activity_pw"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="#26000000"
-            android:ems="10"
-            android:hint="생년월일"
+            android:hint="비밀번호"
             android:inputType="textWebPassword"
             android:textColor="#262626"
             android:textColorHint="#26000000"
+
             tools:inputType="textWebEmailAddress" />
 
         <EditText
-            android:id="@+id/_register_activity_checkpw"
+            android:id="@+id/edt_register_activity_checkpw"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="#26000000"
@@ -108,15 +108,15 @@
             tools:inputType="textWebEmailAddress" />
 
         <EditText
-            android:id="@+id/_register_activity_pw"
+            android:id="@+id/edt_register_activity_birth"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="#26000000"
-            android:hint="비밀번호"
+            android:ems="10"
+            android:hint="생년월일"
             android:inputType="textWebPassword"
             android:textColor="#262626"
             android:textColorHint="#26000000"
-
             tools:inputType="textWebEmailAddress" />
 
         <TextView

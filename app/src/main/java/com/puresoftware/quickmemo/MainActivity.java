@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -15,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
@@ -28,8 +30,11 @@ public class MainActivity extends Activity {
     View drawerView;
     ImageView btnMenu;
 
-    String TAG = MainActivity.class.getSimpleName();
+    TextView tvDrawerTitle;
+    TextView tvDrawerEmail;
+    ImageView btnDrawerSettings;
 
+    String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +44,12 @@ public class MainActivity extends Activity {
         btnMenu = findViewById(R.id.btn_main_menu);
         menuNavi = (DrawerLayout) findViewById(R.id.main_drawer_layout);
         drawerView = (View) findViewById(R.id.v_main_drawer);
+        // NavigationView navigationView = (NavigationView) findViewById(R.id.main_navi_view);
 
-//        NavigationView navigationView = (NavigationView) findViewById(R.id.main_navi_view);
+        // DrawerLayout 내 오브젝트
+        tvDrawerTitle = drawerView.findViewById(R.id.tv_main_drawer_custom_ID);
+        tvDrawerEmail = drawerView.findViewById(R.id.tv_main_drawer_custom_Email);
+        btnDrawerSettings = drawerView.findViewById(R.id.btn_main_drawer_custom_settings);
 
 
         // Top 카드 메뉴
@@ -59,9 +68,9 @@ public class MainActivity extends Activity {
         recyclerView.setLayoutManager(staggeredGridLayoutManager);
 
         Adapter adapter = new Adapter();
-        for (int i = 0; i < 100; i=i+2) {
+        for (int i = 0; i < 100; i = i + 2) {
             String left = i + "번째 아이템";
-            String right = (i+1) + "번째 아이템";
+            String right = (i + 1) + "번째 아이템";
             adapter.setArrayData(left, right);
         }
         recyclerView.setAdapter(adapter);
@@ -93,17 +102,28 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 menuNavi.openDrawer(drawerView);
+
+                // 설정 버튼
+                btnDrawerSettings.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(MainActivity.this, AppSettingsActivity.class);
+                        startActivity(intent);
+                    }
+                });
+
             }
         });
 
     }
+
 
     @Override
     public void onBackPressed() {
 
         if (menuNavi.isDrawerOpen(drawerView) == true) {
             menuNavi.closeDrawer(drawerView);
-        }else{
+        } else {
             super.onBackPressed(); // 종료 기능을 수행
         }
     }

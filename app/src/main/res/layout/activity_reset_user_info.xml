@@ -39,7 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="#26000000"
-        android:text="이메일을 입력하세요"
+        android:text="가입정보를 입력하세요"
         android:textAlignment="center"
         android:textColor="#262626"
         android:textColorHint="#26000000"
@@ -62,13 +62,14 @@
         app:layout_constraintTop_toTopOf="@+id/guideline18">
 
         <EditText
-            android:id="@+id/edt_reset_user_activity_id"
+            android:id="@+id/edt_reset_user_activity_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="60dp"
             android:layout_marginRight="60dp"
             android:backgroundTint="#26000000"
             android:ems="10"
+            android:hint="이메일 또는 전화번호 입력"
             android:inputType="textWebPassword"
             android:textColor="#262626"
             android:textColorHint="#26000000"
