@@ -112,10 +112,9 @@
             android:backgroundTint="#26000000"
             android:ems="10"
             android:hint="이메일 또는 전화번호 입력"
-            android:inputType="textPersonName"
+            android:inputType="textWebEmailAddress"
             android:textColor="#262626"
-            android:textColorHint="#26000000"
-            tools:inputType="textWebEmailAddress" />
+            android:textColorHint="#26000000" />
 
         <EditText
             android:id="@+id/edt_login_activity_pw"
@@ -127,11 +126,10 @@
             android:hint="비밀번호 입력"
             android:inputType="textWebPassword"
             android:textColor="#262626"
-            android:textColorHint="#26000000"
-            tools:inputType="textWebEmailAddress" />
+            android:textColorHint="#26000000" />
 
         <TextView
-            android:id="@+id/tv_reset_password_message"
+            android:id="@+id/tv_login_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="비밀번호를 입력해주세요"

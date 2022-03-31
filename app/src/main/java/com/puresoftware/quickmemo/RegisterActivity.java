@@ -9,6 +9,16 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 public class RegisterActivity extends AppCompatActivity {
 
     CheckBox cbPolicy;
@@ -55,8 +65,21 @@ public class RegisterActivity extends AppCompatActivity {
                         Log.i(TAG, "not data");
                     } else {
 
-                        // 순차적 데이터 값 교환.
+                        OkHttpClient client = new OkHttpClient();
 
+//                         post파라미터 구성
+                        RequestBody body = new FormBody.Builder()
+                                .add("userEmail", Email)
+                                .add("userPW", PW)
+                                .add("userBirth", birth)
+                                .build();
+//
+                        Request request = new Request.Builder()
+                                .url("https://9bc0-58-239-206-38.ngrok.io/quick/register")
+                                .post(body)
+                                .build();
+
+                        client.newCall(request).enqueue(callback);
                     }
 
                 } else {
@@ -65,4 +88,19 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
     }
+    Callback callback = new Callback() {
+        @Override
+        public void onFailure(Call call, IOException e) {
+            Log.i(TAG,"register data failed");
+        }
+
+        @Override
+        public void onResponse(Call call, Response response) throws IOException {
+            Log.i(TAG,"register data succeced");
+
+            // json
+            String body = response.body().string();
+            Log.i(TAG, body);
+        }
+    };
 }

@@ -6,7 +6,7 @@
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/drawable/main_card.xml" value="0.24144736842105263" />
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/drawable/write_activity_btn_menuline.xml" value="0.24144736842105263" />
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/layout/activity_login.xml" value="0.2" />
-        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/layout/activity_main.xml" value="0.23125" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/layout/activity_main.xml" value="0.18" />
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/layout/activity_pinactivity.xml" value="0.25" />
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/layout/activity_register.xml" value="0.22" />
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/layout/activity_reset_password.xml" value="0.23125" />
@@ -20,8 +20,10 @@
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/layout/main_menu_header.xml" value="0.22" />
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/layout/main_top_card_item.xml" value="0.25" />
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/layout/main_top_card_item_important.xml" value="0.25" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/layout/web_item_xml.xml" value="0.1424342105263158" />
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/menu/main_navi_menu.xml" value="0.23125" />
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/xml/settings.xml" value="0.25" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/xml/settings_floating.xml" value="0.11360698125404008" />
       </map>
     </option>
   </component>

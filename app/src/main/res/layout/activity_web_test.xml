@@ -14,10 +14,8 @@
         android:layout_height="100dp"
         android:text="접속하기" />
 
-    <TextView
-        android:id="@+id/tv_result"
+    <ListView
+        android:id="@+id/lv_web_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0"
-        android:text="TextView" />
+        android:layout_height="match_parent" />
 </LinearLayout>

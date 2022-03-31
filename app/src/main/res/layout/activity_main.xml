@@ -8,6 +8,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -129,7 +130,21 @@
             android:layout_gravity="center|top"
             android:textAlignment="center"
 
-            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fbtn_main_write"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="16dp"
+            android:backgroundTint="#FF5353"
+            android:src="@drawable/ic_baseline_create_pencil_24"
+            app:borderWidth="0dp"
+            app:tint="@color/white" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
@@ -145,5 +160,6 @@
     <!--        app:menu="@menu/main_navi_menu" />-->
 
     <include layout="@layout/main_drawer_custom" />
+
 
 </androidx.drawerlayout.widget.DrawerLayout>

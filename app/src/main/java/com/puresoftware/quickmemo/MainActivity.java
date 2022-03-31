@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends Activity {
@@ -29,6 +30,8 @@ public class MainActivity extends Activity {
     DrawerLayout menuNavi;
     View drawerView;
     ImageView btnMenu;
+    FloatingActionButton fbtnWrite;
+    ImageView btnSearch;
 
     TextView tvDrawerTitle;
     TextView tvDrawerEmail;
@@ -44,6 +47,9 @@ public class MainActivity extends Activity {
         btnMenu = findViewById(R.id.btn_main_menu);
         menuNavi = (DrawerLayout) findViewById(R.id.main_drawer_layout);
         drawerView = (View) findViewById(R.id.v_main_drawer);
+        fbtnWrite = findViewById(R.id.fbtn_main_write);
+        btnSearch = findViewById(R.id.btn_main_search);
+
         // NavigationView navigationView = (NavigationView) findViewById(R.id.main_navi_view);
 
         // DrawerLayout 내 오브젝트
@@ -98,6 +104,13 @@ public class MainActivity extends Activity {
             }
         });
 
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
         btnMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -112,6 +125,14 @@ public class MainActivity extends Activity {
                     }
                 });
 
+            }
+        });
+
+        fbtnWrite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, WriteActivity.class);
+                startActivity(intent);
             }
         });
 

@@ -29,6 +29,7 @@ public class AppSettingsActivity extends PreferenceActivity {
 
             case "floating mode":
                 intentGo(SettingsFloatingActivity.class);
+
                 break;
 
             case "key mode":
