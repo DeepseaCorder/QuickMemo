@@ -12,11 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.QuickMemo">
         <activity
+            android:name=".RichTextEditorActivity"
+            android:exported="true"></activity>
+        <activity
             android:name=".WebTestActivity"
-            android:exported="true">
-
-
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".WriteActivity"
             android:exported="false" />
@@ -31,13 +31,10 @@
             android:exported="false" />
         <activity
             android:name=".RegisterActivity"
-            android:exported="true"></activity>
-
-
+            android:exported="true" />
         <activity
             android:name=".LoginActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".SettingsFloatingActivity"
             android:exported="false"
@@ -45,22 +42,21 @@
             android:theme="@style/Theme.QuickMemo.NoActionBar" />
         <activity
             android:name=".AppSettingsActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".SplashActivity"
+            android:exported="true"></activity>
+        <activity
+            android:name=".MainActivity"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".MainActivity"
-            android:exported="true" >
-        </activity>
 
-
+        </activity>
     </application>
 
 </manifest>

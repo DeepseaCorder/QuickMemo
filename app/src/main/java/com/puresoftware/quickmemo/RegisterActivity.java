@@ -75,7 +75,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 .build();
 //
                         Request request = new Request.Builder()
-                                .url("https://9bc0-58-239-206-38.ngrok.io/quick/register")
+                                .url("https://cfa1-58-239-206-38.ngrok.io/quick/register")
                                 .post(body)
                                 .build();
 

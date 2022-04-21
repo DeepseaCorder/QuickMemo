@@ -22,4 +22,5 @@
     <style name="Theme.QuickMemo.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.QuickMemo.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
 </resources>
