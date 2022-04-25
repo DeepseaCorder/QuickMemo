@@ -32,6 +32,7 @@
             android:ems="10"
             android:hint="제목을 입력하세요"
             android:inputType="textPersonName"
+            android:textSize="20sp"
             tools:textColorHint="#26000000" />
 
         <ImageView
@@ -78,11 +79,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:paddingLeft="2dp"
-            android:paddingBottom="5dp"
-            android:text="21"
+            android:text="크기"
             android:textAlignment="center"
-            android:textSize="28sp"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <ImageView
@@ -123,7 +122,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:translationY="1dp"
+            android:translationY="2dp"
             app:srcCompat="@drawable/ic_underline_solid" />
 
     </LinearLayout>

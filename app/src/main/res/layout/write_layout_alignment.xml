@@ -29,7 +29,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tv_write_activity_menu_font_small"
+                    android:id="@+id/tv_write_activity_menu_align_ledt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -41,7 +41,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/tv_write_activity_menu_font_mid"
+                    android:id="@+id/tv_write_activity_menu_align_center"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -53,7 +53,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/tv_write_activity_menu_font_big"
+                    android:id="@+id/tv_write_activity_menu_align_right"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"

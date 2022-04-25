@@ -1,5 +1,7 @@
 package com.puresoftware.quickmemo;
 
+import static com.puresoftware.quickmemo.R.drawable.*;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -9,26 +11,16 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.security.Timestamp;
 
 import jp.wasabeef.richeditor.RichEditor;
 
@@ -55,6 +47,9 @@ public class WriteActivity extends AppCompatActivity {
     //switch
     boolean starSwitch = false;
     boolean lockSwitch = false;
+    boolean boldSwitch = false;
+    boolean cancelLineSwitch = false;
+    boolean underLineSwitch = false;
 
     String TAG = WriteActivity.class.getSimpleName();
 
@@ -140,8 +135,13 @@ public class WriteActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 starSwitch = !starSwitch;
-
                 Log.i(TAG, "starSwitch status: " + starSwitch + "");
+
+                if (starSwitch == false) {
+                    btnStar.setImageResource(ic_write_activity_star_regular);
+                } else {
+                    btnStar.setImageResource(ic_write_activity_star_selected);
+                }
             }
         });
 
@@ -152,6 +152,11 @@ public class WriteActivity extends AppCompatActivity {
                 lockSwitch = !lockSwitch;
                 Log.i(TAG, "starSwitch status: " + lockSwitch + "");
 
+                if (lockSwitch == false) {
+                    btnLock.setImageResource(ic_write_activity_lock_solid);
+                } else {
+                    btnLock.setImageResource(R.drawable.ic_write_activity_lock_selected);
+                }
             }
         });
 
@@ -160,7 +165,6 @@ public class WriteActivity extends AppCompatActivity {
             @SuppressLint("WrongConstant")
             @Override
             public void onClick(View view) {
-
 
                 //팝업윈도우 구현
                 PopupWindow popupWindow = new PopupWindow(view);
@@ -180,26 +184,19 @@ public class WriteActivity extends AppCompatActivity {
 //                popupWindow.showAsDropDown(btnFontSize, 0, -50);
 //                popupWindow.showAtLocation(btnFontSize, Gravity.LEFT, 0,
 //                        btnFontSize.getBottom() - 60);
-                popupWindow.showAsDropDown(btnFontSize, 0, -300);
+                popupWindow.showAsDropDown(btnFontSize, 0, -310);
 
 //                popupWindow.showAsDropDown(btnFontSize, 0, btnFontSize.getBottom() - 60);
 
-
-                TextView tvFontSmall = inflateView.findViewById(R.id.tv_write_activity_menu_font_small);
-                TextView tvFontMid = inflateView.findViewById(R.id.tv_write_activity_menu_font_mid);
-                TextView tvFontBig = inflateView.findViewById(R.id.tv_write_activity_menu_font_big);
+                TextView tvFontSmall = inflateView.findViewById(R.id.tv_write_activity_menu_align_ledt);
+                TextView tvFontMid = inflateView.findViewById(R.id.tv_write_activity_menu_align_center);
+                TextView tvFontBig = inflateView.findViewById(R.id.tv_write_activity_menu_align_right);
 
                 tvFontSmall.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        tvFontSmall.setTextColor(Color.parseColor("#FFFF2B2B"));
-                        tvFontMid.setTextColor(Color.parseColor("#000000"));
-                        tvFontBig.setTextColor(Color.parseColor("#000000"));
-
                         richEditor.setFontSize(3);
                         popupWindow.dismiss();
-
-
                     }
                 });
 
@@ -208,11 +205,6 @@ public class WriteActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         richEditor.setFontSize(5);
                         popupWindow.dismiss();
-
-                        tvFontSmall.setTextColor(Color.BLACK);
-                        tvFontMid.setTextColor(Color.RED);
-                        tvFontBig.setTextColor(Color.BLACK);
-
                     }
                 });
 
@@ -221,16 +213,8 @@ public class WriteActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         richEditor.setFontSize(10);
                         popupWindow.dismiss();
-
-                        tvFontSmall.setTextColor(Color.BLACK);
-                        tvFontMid.setTextColor(Color.BLACK);
-                        tvFontBig.setTextColor(Color.RED);
-
                     }
                 });
-
-                //error: popupwindow를 키면 keyboard가 바뀌고 그 현상이 보임.
-
             }
         });
 
@@ -254,12 +238,88 @@ public class WriteActivity extends AppCompatActivity {
                 popupWindow.setOutsideTouchable(true); //팝업 뷰 이외에도 터치되게 (터치시 팝업 닫기 위한 코드)
                 popupWindow.setBackgroundDrawable(new BitmapDrawable());
 
-//                popupWindow.showAsDropDown(btnFontSize, 0, -50);
-                popupWindow.showAsDropDown(btnColor, 0, -300);
+                popupWindow.showAsDropDown(btnColor, 0, -310);
 
-//                popupWindow.showAtLocation(btnColor, Gravity., 0, 0);
-//                popupWindow.showAsDropDown(btnFontSize, 0, btnFontSize.getBottom() - 60);
+                ImageView btnMenuRed = inflateView.findViewById(R.id.tv_write_activity_menu_color_red);
+                ImageView btnMenuOrange = inflateView.findViewById(R.id.tv_write_activity_menu_color_orange);
+                ImageView btnMenuYellow = inflateView.findViewById(R.id.tv_write_activity_menu_color_yellow);
+                ImageView btnMenuGreen = inflateView.findViewById(R.id.tv_write_activity_menu_color_green);
+                ImageView btnMenuSky = inflateView.findViewById(R.id.tv_write_activity_menu_color_sky);
+                ImageView btnMenuBlue = inflateView.findViewById(R.id.tv_write_activity_menu_color_blue);
+                ImageView btnMenuPurple = inflateView.findViewById(R.id.tv_write_activity_menu_color_purple);
+                ImageView btnMenuBlack = inflateView.findViewById(R.id.tv_write_activity_menu_color_black);
 
+                btnMenuRed.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        richEditor.setTextColor(Color.parseColor("#FF4D4D"));
+                        popupWindow.dismiss();
+
+                    }
+                });
+
+                btnMenuOrange.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        richEditor.setTextColor(Color.parseColor("#FFA94D"));
+                        popupWindow.dismiss();
+
+                    }
+                });
+
+                btnMenuYellow.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        richEditor.setTextColor(Color.parseColor("#FFED4D"));
+                        popupWindow.dismiss();
+
+                    }
+                });
+
+                btnMenuGreen.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        richEditor.setTextColor(Color.parseColor("#8BFF4D"));
+                        popupWindow.dismiss();
+
+                    }
+                });
+
+                btnMenuSky.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        richEditor.setTextColor(Color.parseColor("#4DC1FF"));
+                        popupWindow.dismiss();
+
+                    }
+                });
+
+                btnMenuBlue.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        richEditor.setTextColor(Color.parseColor("#4D65FF"));
+                        popupWindow.dismiss();
+
+                    }
+                });
+
+                btnMenuPurple.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        richEditor.setTextColor(Color.parseColor("#A04DFF"));
+                        popupWindow.dismiss();
+
+                    }
+                });
+
+                btnMenuBlack.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        richEditor.setTextColor(Color.parseColor("#000000"));
+                        popupWindow.dismiss();
+
+                    }
+                });
 
             }
         });
@@ -283,13 +343,32 @@ public class WriteActivity extends AppCompatActivity {
                 popupWindow.setOutsideTouchable(true); //팝업 뷰 이외에도 터치되게 (터치시 팝업 닫기 위한 코드)
                 popupWindow.setBackgroundDrawable(new BitmapDrawable());
 
-//                popupWindow.showAsDropDown(btnFontSize, 0, -50);
-//                popupWindow.showAtLocation(btnFontSize, Gravity.LEFT, 0,
-//                        btnFontSize.getBottom() - 60);
-                popupWindow.showAsDropDown(btnAlignment, 0, -300);
+                popupWindow.showAsDropDown(btnAlignment, 0, -310);
 
-//                popupWindow.showAsDropDown(btnFontSize, 0, btnFontSize.getBottom() - 60);
+                TextView tvLeft = inflateView.findViewById(R.id.tv_write_activity_menu_align_ledt);
+                TextView tvCenter = inflateView.findViewById(R.id.tv_write_activity_menu_align_center);
+                TextView tvRight = inflateView.findViewById(R.id.tv_write_activity_menu_align_right);
 
+                tvLeft.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        richEditor.setAlignLeft();
+                    }
+                });
+
+                tvCenter.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        richEditor.setAlignCenter();
+                    }
+                });
+
+                tvRight.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        richEditor.setAlignRight();
+                    }
+                });
             }
         });
 
@@ -297,14 +376,31 @@ public class WriteActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-
+                if (boldSwitch == false) {
+                    boldSwitch = true;
+                    btnBold.setImageResource(ic_bold_selected);
+                    richEditor.setBold();
+                } else {
+                    boldSwitch = false;
+                    btnBold.setImageResource(ic_bold_solid);
+                    richEditor.setBold();
+                }
             }
         });
 
         btnCancelLine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (cancelLineSwitch == false) {
+                    cancelLineSwitch = true;
+                    btnCancelLine.setImageResource(ic_strikethrough_selected);
+                    richEditor.setStrikeThrough();
+                } else {
+                    cancelLineSwitch = false;
+                    btnCancelLine.setImageResource(ic_strikethrough_solid);
+                    richEditor.setStrikeThrough();
 
+                }
             }
         });
 
@@ -312,8 +408,16 @@ public class WriteActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                if (underLineSwitch == false) {
+                    underLineSwitch = true;
+                    btnUnderLine.setImageResource(ic_underline_selected);
+                    richEditor.setUnderline();
+                } else {
+                    underLineSwitch = false;
+                    btnUnderLine.setImageResource(ic_underline_solid);
+                    richEditor.setUnderline();
+                }
             }
         });
-
     }
 }
