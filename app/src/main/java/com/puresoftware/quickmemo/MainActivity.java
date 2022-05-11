@@ -21,6 +21,11 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.puresoftware.quickmemo.room.AppDatabase;
+import com.puresoftware.quickmemo.room.Memo;
+import com.puresoftware.quickmemo.room.MemoDao;
+
+import java.util.List;
 
 public class MainActivity extends Activity {
 
@@ -57,6 +62,21 @@ public class MainActivity extends Activity {
         tvDrawerEmail = drawerView.findViewById(R.id.tv_main_drawer_custom_Email);
         btnDrawerSettings = drawerView.findViewById(R.id.btn_main_drawer_custom_settings);
 
+        // RoomDB 메모내용 불러오기
+        AppDatabase db = AppDatabase.getInstance(this);
+        MemoDao memoDao = db.dao();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // 메모 불러오기
+                List<Memo> loadMemo = memoDao.getAll();
+                //향상된 for문
+                for (Memo memo : loadMemo) {
+                    Log.i(TAG, "load memo:" + memo.toString() + "\n");
+                }
+            }
+        }).start();
 
         // Top 카드 메뉴
         if (linTopcard1 == null || linTopcard2 == null) {

@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -18,9 +19,16 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.puresoftware.quickmemo.room.AppDatabase;
+import com.puresoftware.quickmemo.room.Memo;
+import com.puresoftware.quickmemo.room.MemoDao;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 import jp.wasabeef.richeditor.RichEditor;
 
@@ -70,6 +78,9 @@ public class WriteActivity extends AppCompatActivity {
         btnCancelLine = findViewById(R.id.btn__write_activity_canceline);
         btnUnderLine = findViewById(R.id.btn__write_activity_underline);
 
+        // RoomDB 객체
+        AppDatabase db = AppDatabase.getInstance(this);
+        MemoDao memoDao = db.dao();
 
         // 기본으로 사용할 폰트의 크기
         richEditor.setFontSize(5);
@@ -83,7 +94,6 @@ public class WriteActivity extends AppCompatActivity {
                 String content = richEditor.getHtml();
                 boolean star = starSwitch;
                 boolean lock = lockSwitch;
-
                 long timeStamp = System.currentTimeMillis();
 
                 Log.i(TAG, "write status "
@@ -93,19 +103,51 @@ public class WriteActivity extends AppCompatActivity {
                         + "" + "/lock: " + lock
                         + "" + "timestamp: " + timeStamp + "");
 
-                JSONObject memo = new JSONObject();
-                try {
-                    memo.put("title", title);
-                    memo.put("content", content);
-                    memo.put("star", star);
-                    memo.put("lock", lock);
+                btnBack.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
 
+                        if (title.trim().isEmpty() && content.trim().isEmpty()) {
+                            Log.i(TAG, "memo null");
+                            finish();
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                        } else {
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Memo memo = new Memo();
 
+                                    memo.title = title;
+                                    memo.content = content;
+                                    memo.lock = lock;
+                                    memo.star = star;
+                                    memo.timestamp = timeStamp;
 
+                                    memoDao.insert(memo);
+                                    Log.i(TAG, "memo completed");
+                                    Log.i(TAG, "list:" + memoDao.getAll() + "");
+
+                                    Intent intent = new Intent(WriteActivity.this, MainActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            }).start();
+                        }
+                    }
+                });
+
+                // SharedFreferences 방법
+//                JSONObject memo = new JSONObject();
+//                try {
+//                    memo.put("title", title);
+//                    memo.put("content", content);
+//                    memo.put("star", star);
+//                    memo.put("lock", lock);
+//
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
 //                '
 //                {
 //                    "title" : "adasd",
@@ -113,11 +155,10 @@ public class WriteActivity extends AppCompatActivity {
 //                }
 //                '
 
-                SharedPreferences preferences = getSharedPreferences("memos", MODE_PRIVATE);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putString("" + timeStamp, memo.toString());
-                editor.commit();
-
+//                SharedPreferences preferences = getSharedPreferences("memos", MODE_PRIVATE);
+//                SharedPreferences.Editor editor = preferences.edit();
+//                editor.putString("" + timeStamp, memo.toString());
+//                editor.commit();
             }
         });
 

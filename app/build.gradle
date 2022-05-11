@@ -50,6 +50,12 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:23.2.0'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'jp.wasabeef:richeditor-android:2.0.0'
+    
+    // room
+    def room_version = "2.4.2"
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+
 
 
 }
