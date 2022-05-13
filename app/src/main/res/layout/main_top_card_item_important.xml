@@ -28,8 +28,8 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/tv_main_top_card_title"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/tv_main_impo_card_title"
+                        android:layout_width="match_parent"
                         android:layout_height="25dp"
                         android:layout_marginLeft="16dp"
                         android:layout_marginTop="16dp"
@@ -40,7 +40,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_main_top_card_date"
+                        android:id="@+id/tv_main_impo_card_date"
 
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -71,12 +71,26 @@
                         android:textColor="#FFCBCB"
                         android:textSize="14sp"
                         android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_main_top_card_impor_lock"
+                        android:layout_width="wrap_content"
+                        android:layout_height="25dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_weight="1"
+                        android:text="잠김"
+                        android:textAlignment="viewEnd"
+                        android:textColor="#FF6D6D"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:visibility="gone"/>
                 </LinearLayout>
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/tv_main_top_card_content"
+            <jp.wasabeef.richeditor.RichEditor
+                android:id="@+id/tv_main_impo_card_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -86,7 +100,9 @@
                 android:text="1.bab\n2.gogi\n3.kimchi\n4.ddeok\n1.bab\n2.gogi\n3.kimchi\n4.ddeok\n"
                 android:textColor="#99000000"
                 android:textSize="14sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+
+                />
 
         </LinearLayout>
 

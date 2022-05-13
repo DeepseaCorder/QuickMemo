@@ -1,13 +1,18 @@
 package com.puresoftware.quickmemo;
 
-import static com.puresoftware.quickmemo.R.drawable.*;
-
-import androidx.appcompat.app.AppCompatActivity;
+import static com.puresoftware.quickmemo.R.drawable.ic_bold_selected;
+import static com.puresoftware.quickmemo.R.drawable.ic_bold_solid;
+import static com.puresoftware.quickmemo.R.drawable.ic_strikethrough_selected;
+import static com.puresoftware.quickmemo.R.drawable.ic_strikethrough_solid;
+import static com.puresoftware.quickmemo.R.drawable.ic_underline_selected;
+import static com.puresoftware.quickmemo.R.drawable.ic_underline_solid;
+import static com.puresoftware.quickmemo.R.drawable.ic_write_activity_lock_solid;
+import static com.puresoftware.quickmemo.R.drawable.ic_write_activity_star_regular;
+import static com.puresoftware.quickmemo.R.drawable.ic_write_activity_star_selected;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -19,20 +24,16 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.puresoftware.quickmemo.room.AppDatabase;
 import com.puresoftware.quickmemo.room.Memo;
 import com.puresoftware.quickmemo.room.MemoDao;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.List;
-
 import jp.wasabeef.richeditor.RichEditor;
 
-public class WriteActivity extends AppCompatActivity {
+public class EditActivity extends AppCompatActivity {
 
     //title line
     ImageView btnBack;
@@ -59,7 +60,7 @@ public class WriteActivity extends AppCompatActivity {
     boolean cancelLineSwitch = false;
     boolean underLineSwitch = false;
 
-    String TAG = WriteActivity.class.getSimpleName();
+    String TAG = EditActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,20 +83,57 @@ public class WriteActivity extends AppCompatActivity {
         AppDatabase db = AppDatabase.getInstance(this);
         MemoDao memoDao = db.dao();
 
+        //데이터 불러오기
+        Intent intent = getIntent();
+        Memo beforeMemo = new Memo();
+        beforeMemo.title = intent.getStringExtra("title");
+        beforeMemo.content = intent.getStringExtra("content");
+        beforeMemo.timestamp = intent.getLongExtra("timestamp", 0);
+        beforeMemo.star = intent.getBooleanExtra("star", false);
+        beforeMemo.lock = intent.getBooleanExtra("lock", false);
+        Log.i(TAG, "loaded- " + "title:" + beforeMemo.title +
+                ",content:" + beforeMemo.content +
+                ",timestamp:" + beforeMemo.timestamp +
+                ",star:" + beforeMemo.star +
+                ",lock" + beforeMemo.lock);
+
+        //데이터 셋업
+        edtTitle.setText(beforeMemo.title);
+        richEditor.setHtml(beforeMemo.content);
+        starSwitch = beforeMemo.star;
+        lockSwitch = beforeMemo.lock;
+
+        //스위치 불러오기(중요)
+        Log.i(TAG, "starSwitch status: " + starSwitch + "");
+        if (starSwitch == false) {
+            btnStar.setImageResource(ic_write_activity_star_regular);
+        } else {
+            btnStar.setImageResource(ic_write_activity_star_selected);
+        }
+
+        //스위치 불러오기(잠금)
+        Log.i(TAG, "lockSwitch status: " + lockSwitch + "");
+        if (lockSwitch == false) {
+            btnLock.setImageResource(ic_write_activity_lock_solid);
+        } else {
+            btnLock.setImageResource(R.drawable.ic_write_activity_lock_selected);
+        }
+
         // 기본으로 사용할 폰트의 크기
         richEditor.setFontSize(5);
-
 
         // 저장 후 메뉴로
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                finish();
+
                 String title = edtTitle.getText().toString().trim();
                 String content = richEditor.getHtml();
                 boolean star = starSwitch;
                 boolean lock = lockSwitch;
                 long timeStamp = System.currentTimeMillis();
+                Log.i(TAG, "insereted- " + "title:" + title + ",content:" + content + ",timestamp:" + timeStamp + ",star:" + star + ",lock" + lock);
+
                 if (title.trim().isEmpty() && content.trim().isEmpty()) {
                     Log.i(TAG, "memo null");
                     finish();
@@ -112,11 +150,13 @@ public class WriteActivity extends AppCompatActivity {
                             memo.star = star;
                             memo.timestamp = timeStamp;
 
+                            memoDao.delete(beforeMemo);
+
                             memoDao.insert(memo);
                             Log.i(TAG, "memo completed");
                             Log.i(TAG, "list:" + memoDao.getAll() + "");
 
-                            Intent intent = new Intent(WriteActivity.this, MainActivity.class);
+                            Intent intent = new Intent(EditActivity.this, MainActivity.class);
                             startActivity(intent);
                             finish();
                         }
@@ -139,6 +179,7 @@ public class WriteActivity extends AppCompatActivity {
                 }
             }
         });
+
 
         btnLock.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -20,6 +20,11 @@
         <activity
             android:name=".WriteActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".EditActivity"
+            android:exported="false" />
+
         <activity
             android:name=".PINActivity"
             android:exported="false" />
