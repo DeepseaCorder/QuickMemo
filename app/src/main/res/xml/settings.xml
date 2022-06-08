@@ -11,7 +11,6 @@
 
         <Preference
             android:defaultValue="false"
-
             android:dependency="login"
             android:key="upload"
             android:summary="저장한 메모들을 업로드 합니다."

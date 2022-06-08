@@ -103,6 +103,9 @@ public class MainActivity extends Activity {
                 long imporRecentStamp = 0;
                 //향상된 for문
 
+                if(memos.size() <= 0) {
+                    return;
+                }
                 lastMemo = memos.get(memos.size() - 1);
                 recentStamp = lastMemo.timestamp;
 
@@ -172,7 +175,10 @@ public class MainActivity extends Activity {
             @Override
 
             public void onClick(View view) {
-                editActivityIntent(lastMemo.title, lastMemo.content, lastMemo.timestamp, lastMemo.star, lastMemo.lock);
+                if(lastMemo != null) {
+                    editActivityIntent(lastMemo.title, lastMemo.content, lastMemo.timestamp, lastMemo.star, lastMemo.lock);
+                }
+
             }
         });
 
@@ -180,7 +186,9 @@ public class MainActivity extends Activity {
         linTopcard2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                editActivityIntent(secondMemo.title, secondMemo.content, secondMemo.timestamp, secondMemo.star, secondMemo.lock);
+                if(lastMemo != null){
+                    editActivityIntent(secondMemo.title, secondMemo.content, secondMemo.timestamp, secondMemo.star, secondMemo.lock);
+                }
             }
         });
 
@@ -245,4 +253,7 @@ public class MainActivity extends Activity {
         intent.putExtra("star", lock);
         startActivity(intent);
     }
+
+
+
 }
