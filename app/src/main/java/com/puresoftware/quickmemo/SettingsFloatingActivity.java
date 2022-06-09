@@ -28,6 +28,7 @@ import androidx.navigation.ui.NavigationUI;
 
 public class SettingsFloatingActivity extends PreferenceActivity {
 
+    Intent intent; // 서비스를 위한 인텐트
     String TAG = SettingsFloatingActivity.class.getSimpleName();
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -36,23 +37,17 @@ public class SettingsFloatingActivity extends PreferenceActivity {
         String key = preference.getKey();
         Log.d(TAG, "클릭된 Preference의 value는 " + key);
 
+        // 기본 플로팅 모드와 앱 선택 플로팅 모드
         switch (key) {
-            case "floating_default":
-
-//                getpermission();
-                if (!Settings.canDrawOverlays(SettingsFloatingActivity.this)) {
-                    getpermission();
-                } else {
-                    Intent intent = new Intent(SettingsFloatingActivity.this, WidgetService.class);
+            case "floating_default": // 기본 플로팅
+                if (intent != null) { // 스위치가 켜저 있다면 인텐트는 그대로 유지되고 있다.
+                    stopService(intent);
                     startService(intent);
-                    finish();
                 }
-
-
                 break;
-            case "floating_difference":   // ACTION_SEND
+
+            case "floating_difference": // 앱 선택해주는 AppChooser
                 Intent i = new Intent(Intent.ACTION_SEND);
-                
                 i.addCategory(Intent.CATEGORY_DEFAULT);
                 i.putExtra(Intent.EXTRA_TEXT, "메모 내용");
                 i.setType("text/plain");
@@ -60,7 +55,6 @@ public class SettingsFloatingActivity extends PreferenceActivity {
             default:
                 break;
         }
-
         return false;
     }
 
@@ -75,22 +69,46 @@ public class SettingsFloatingActivity extends PreferenceActivity {
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs
                 .registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.M)
                     public void onSharedPreferenceChanged(SharedPreferences sp, String key) {
                         Log.i(TAG, "클릭된 Preference의 key는 " + key);
 
+                        // 스위치 상태가 켜짐이라면 켜기
+                        if (prefs.getBoolean("floating_status", true)) {
+                            Log.i(TAG, "yes!");
+
+                            // 오버레이 권한이 없으면 오버레이 권한을 받아야함
+                            if (!Settings.canDrawOverlays(SettingsFloatingActivity.this)) {
+                                getpermission();
+
+                                // 오버레이 권한이 있으면 바로 실행
+                            } else {
+                                intent = new Intent(SettingsFloatingActivity.this, WidgetService.class);
+                                startService(intent);
+                            }
+
+                            // 스위치 상태가 꺼짐이라면 끄기
+                        } else {
+                            Log.i(TAG, "no!");
+
+                            if (intent != null) {
+                                stopService(intent);
+                            }
+                        }
                     }
                 });
     }
+
 
     // M 버전(안드로이드 6.0 마시멜로우 버전) 보다 같거나 큰 API에서만 설정창 이동 가능
     public void getpermission() {
         // 지금 창이 오버레이 설정창이 아니라면
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
             Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
-
             startActivityForResult(intent, 1);
         }
     }
+
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -104,7 +122,6 @@ public class SettingsFloatingActivity extends PreferenceActivity {
 
                 Toast.makeText(this, "Permission denied by user", Toast.LENGTH_SHORT).show();
             }
-
         }
     }
 }

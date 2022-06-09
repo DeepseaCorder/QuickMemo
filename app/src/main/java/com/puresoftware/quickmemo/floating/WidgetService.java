@@ -29,6 +29,7 @@ public class WidgetService extends Service {
     View mFloatingView;
     WindowManager windowManager;
     ImageView imageClose;
+    ImageView imageCloseSelect;
     TextView tvWidth;
     float height, width;
 
@@ -81,6 +82,10 @@ public class WidgetService extends Service {
         imageClose = new ImageView(this);
         imageClose.setImageResource(R.drawable.ic_baseline_delete_outline_24);
         imageClose.setVisibility(View.INVISIBLE);
+
+        imageCloseSelect = new ImageView(this);
+        imageCloseSelect.setImageResource(R.drawable.ic_baseline_delete_outline_select24);
+
         windowManager.addView(imageClose, imageParams);
         windowManager.addView(mFloatingView, layoutParams);
         mFloatingView.setVisibility(View.VISIBLE);
@@ -104,9 +109,8 @@ public class WidgetService extends Service {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
 
-                long clickDuration = Calendar.getInstance().getTimeInMillis() - startCkickTime;
-                imageClose.setVisibility(view.GONE);
-                Log.i(TAG, "click time:" + clickDuration);
+                Log.i(TAG,"여긴 ontouch");
+
 
                 switch (motionEvent.getAction()) {
 
@@ -126,6 +130,10 @@ public class WidgetService extends Service {
                         return true;
 
                     case MotionEvent.ACTION_UP:
+
+                        long clickDuration = Calendar.getInstance().getTimeInMillis() - startCkickTime;
+                        imageClose.setVisibility(view.GONE);
+                        Log.i(TAG, "click time:" + clickDuration);
 
                         // 초기 좌표와 현재 좌표의 차이 가져 오기
                         layoutParams.x = initialx + (int) (initialTouchX - motionEvent.getRawX());
@@ -153,7 +161,7 @@ public class WidgetService extends Service {
 
                         // 플로팅으로 writeActivity띄우기
 
-                        Toast.makeText(WidgetService.this, "이것은 액션 업입니다.", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(WidgetService.this, "이것은 액션 업입니다.", Toast.LENGTH_SHORT).show();
                         return true;
 
                     case MotionEvent.ACTION_MOVE:
@@ -165,14 +173,14 @@ public class WidgetService extends Service {
                         // 새로운 X 및 Y 좌표로 레이아웃 업데이트
                         windowManager.updateViewLayout(mFloatingView, layoutParams);
 
-                        if (layoutParams.y > (height * 0.6)) {
+                        if (layoutParams.y > (height * 0.8)) {
 
-                            imageClose.setImageResource(R.drawable.ic_baseline_delete_outline_24);
+                            imageClose.setImageResource(R.drawable.ic_baseline_delete_outline_select24);
                         } else {
                             imageClose.setImageResource(R.drawable.ic_baseline_delete_outline_24);
                         }
 
-                        Toast.makeText(WidgetService.this, "이것은 움직입니다.", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(WidgetService.this, "이것은 움직입니다.", Toast.LENGTH_SHORT).show();
 
                         return true;
 
