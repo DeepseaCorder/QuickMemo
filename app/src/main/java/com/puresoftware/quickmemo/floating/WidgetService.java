@@ -32,6 +32,7 @@ public class WidgetService extends Service {
     ImageView imageCloseSelect;
     TextView tvWidth;
     float height, width;
+    long clickDuration;
 
     // 플로팅 위젯 뷰가 왼쪽에 있는지 오른쪽에 있는지 확인하는 변수
     // 처음에는 플로팅 위젯 뷰를 오른쪽에 표시하므로 false로 설정
@@ -105,18 +106,14 @@ public class WidgetService extends Service {
             // 클릭으로 볼 최대시간
             int MAX_CLICK_DURATION = 200;
 
-
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-
-                Log.i(TAG,"여긴 ontouch");
-
 
                 switch (motionEvent.getAction()) {
 
                     case MotionEvent.ACTION_DOWN:
 
-                        startCkickTime = Calendar.getInstance().getTimeInMillis();
+                        startCkickTime = Calendar.getInstance().getTimeInMillis(); // 처음 클릭한 시간
                         imageClose.setVisibility(View.VISIBLE);
 
                         // 초기 위치 기억
@@ -131,7 +128,7 @@ public class WidgetService extends Service {
 
                     case MotionEvent.ACTION_UP:
 
-                        long clickDuration = Calendar.getInstance().getTimeInMillis() - startCkickTime;
+                        clickDuration = Calendar.getInstance().getTimeInMillis() - startCkickTime; // 지금 손 뗀 시간
                         imageClose.setVisibility(view.GONE);
                         Log.i(TAG, "click time:" + clickDuration);
 
@@ -179,16 +176,11 @@ public class WidgetService extends Service {
                         } else {
                             imageClose.setImageResource(R.drawable.ic_baseline_delete_outline_24);
                         }
-
-//                        Toast.makeText(WidgetService.this, "이것은 움직입니다.", Toast.LENGTH_SHORT).show();
-
                         return true;
-
                 }
                 return false;
             }
         });
-
         return START_STICKY;
     }
 

@@ -47,11 +47,13 @@ public class SettingsFloatingActivity extends PreferenceActivity {
                 break;
 
             case "floating_difference": // 앱 선택해주는 AppChooser
-                Intent i = new Intent(Intent.ACTION_SEND);
-                i.addCategory(Intent.CATEGORY_DEFAULT);
-                i.putExtra(Intent.EXTRA_TEXT, "메모 내용");
-                i.setType("text/plain");
-                startActivity(Intent.createChooser(i, "실행"));
+                if (intent != null) { // 스위치가 켜저 있다면 인텐트는 그대로 유지되고 있다.
+                    Intent i = new Intent(Intent.ACTION_SEND);
+                    i.addCategory(Intent.CATEGORY_DEFAULT);
+                    i.putExtra(Intent.EXTRA_TEXT, "메모 내용");
+                    i.setType("text/plain");
+                    startActivity(Intent.createChooser(i, "실행"));
+                }
             default:
                 break;
         }
@@ -74,25 +76,24 @@ public class SettingsFloatingActivity extends PreferenceActivity {
                         Log.i(TAG, "클릭된 Preference의 key는 " + key);
 
                         // 스위치 상태가 켜짐이라면 켜기
-                        if (prefs.getBoolean("floating_status", true)) {
+                        if (sp.getBoolean("floating_status", true)) {
                             Log.i(TAG, "yes!");
 
                             // 오버레이 권한이 없으면 오버레이 권한을 받아야함
                             if (!Settings.canDrawOverlays(SettingsFloatingActivity.this)) {
                                 getpermission();
-
-                                // 오버레이 권한이 있으면 바로 실행
+                                intent = new Intent(SettingsFloatingActivity.this, WidgetService.class);
                             } else {
                                 intent = new Intent(SettingsFloatingActivity.this, WidgetService.class);
-                                startService(intent);
                             }
 
-                            // 스위치 상태가 꺼짐이라면 끄기
+                            // 스위치 상태가 꺼짐이라면 끄고, 인텐트 객체도 null 하기.
                         } else {
                             Log.i(TAG, "no!");
 
                             if (intent != null) {
                                 stopService(intent);
+                                intent = null;
                             }
                         }
                     }
