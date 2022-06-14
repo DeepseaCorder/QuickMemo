@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.puresoftware.quickmemo">
 
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -64,8 +65,23 @@
 
         </activity>
 
-        <service android:name=".floating.WidgetService"
-            android:enabled="true"/>
+        <service
+            android:name=".floating.WidgetService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <receiver
+            android:name=".BootReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+
+            <!-- build android 12부터는 exported true를 통해 서비스 접근을 얻어야 한다.-->
+
+
+        </receiver>
     </application>
 
 </manifest>

@@ -1,5 +1,6 @@
 package com.puresoftware.quickmemo.floating;
 
+import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
 import android.graphics.PixelFormat;
@@ -46,6 +47,7 @@ public class WidgetService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             LAYOUT_FLAG = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;

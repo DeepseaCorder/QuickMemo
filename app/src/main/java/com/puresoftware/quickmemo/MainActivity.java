@@ -89,6 +89,7 @@ public class MainActivity extends Activity {
             linTopcard1 = findViewById(R.id.lin_main_infate_top_card1);
             linTopcard2 = findViewById(R.id.lin_main_infate_top_card2);
             LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+
             firstView = inflater.inflate(R.layout.main_top_card_item, linTopcard1, true);
             secondView = inflater.inflate(R.layout.main_top_card_item_important, linTopcard2, true);
         }
@@ -103,7 +104,7 @@ public class MainActivity extends Activity {
                 long imporRecentStamp = 0;
                 //향상된 for문
 
-                if(memos.size() <= 0) {
+                if (memos.size() <= 0) {
                     return;
                 }
                 lastMemo = memos.get(memos.size() - 1);
@@ -175,7 +176,7 @@ public class MainActivity extends Activity {
             @Override
 
             public void onClick(View view) {
-                if(lastMemo != null) {
+                if (lastMemo != null) {
                     editActivityIntent(lastMemo.title, lastMemo.content, lastMemo.timestamp, lastMemo.star, lastMemo.lock);
                 }
 
@@ -186,7 +187,7 @@ public class MainActivity extends Activity {
         linTopcard2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(lastMemo != null){
+                if (lastMemo != null) {
                     editActivityIntent(secondMemo.title, secondMemo.content, secondMemo.timestamp, secondMemo.star, secondMemo.lock);
                 }
             }
@@ -253,7 +254,6 @@ public class MainActivity extends Activity {
         intent.putExtra("star", lock);
         startActivity(intent);
     }
-
 
 
 }

@@ -1,5 +1,6 @@
 package com.puresoftware.quickmemo;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -31,11 +32,15 @@ public class SettingsFloatingActivity extends PreferenceActivity {
     Intent intent; // 서비스를 위한 인텐트
     String TAG = SettingsFloatingActivity.class.getSimpleName();
 
+//    SharedPreferences settings = getSharedPreferences("floating_status", MODE_PRIVATE);
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
         String key = preference.getKey();
         Log.d(TAG, "클릭된 Preference의 value는 " + key);
+
+//        SharedPreferences.Editor editor = settings.edit();
 
         // 기본 플로팅 모드와 앱 선택 플로팅 모드
         switch (key) {
@@ -43,6 +48,8 @@ public class SettingsFloatingActivity extends PreferenceActivity {
                 if (intent != null) { // 스위치가 켜저 있다면 인텐트는 그대로 유지되고 있다.
                     stopService(intent);
                     startService(intent);
+//                    editor.putString("mode", "default");
+//                    editor.commit();
                 }
                 break;
 
@@ -53,6 +60,9 @@ public class SettingsFloatingActivity extends PreferenceActivity {
                     i.putExtra(Intent.EXTRA_TEXT, "메모 내용");
                     i.setType("text/plain");
                     startActivity(Intent.createChooser(i, "실행"));
+
+//                    editor.putString("mode", "difference");
+//                    editor.commit();
                 }
             default:
                 break;
@@ -75,6 +85,8 @@ public class SettingsFloatingActivity extends PreferenceActivity {
                     public void onSharedPreferenceChanged(SharedPreferences sp, String key) {
                         Log.i(TAG, "클릭된 Preference의 key는 " + key);
 
+//                        SharedPreferences.Editor editor = settings.edit(); // 부트 서비스에 쓸 상태값 저장
+
                         // 스위치 상태가 켜짐이라면 켜기
                         if (sp.getBoolean("floating_status", true)) {
                             Log.i(TAG, "yes!");
@@ -86,6 +98,8 @@ public class SettingsFloatingActivity extends PreferenceActivity {
                             } else {
                                 intent = new Intent(SettingsFloatingActivity.this, WidgetService.class);
                             }
+//                            editor.putString("status", "true");
+//                            editor.commit();
 
                             // 스위치 상태가 꺼짐이라면 끄고, 인텐트 객체도 null 하기.
                         } else {
@@ -94,6 +108,9 @@ public class SettingsFloatingActivity extends PreferenceActivity {
                             if (intent != null) {
                                 stopService(intent);
                                 intent = null;
+
+//                                editor.putString("status", "false");
+//                                editor.commit();
                             }
                         }
                     }

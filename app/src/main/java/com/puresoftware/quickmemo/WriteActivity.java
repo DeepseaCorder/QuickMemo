@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,6 +60,8 @@ public class WriteActivity extends AppCompatActivity {
     boolean cancelLineSwitch = false;
     boolean underLineSwitch = false;
 
+    String content;
+
     String TAG = WriteActivity.class.getSimpleName();
 
     @Override
@@ -91,13 +94,22 @@ public class WriteActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 //                finish();
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                    }
+                });
+
                 String title = edtTitle.getText().toString().trim();
                 String content = richEditor.getHtml();
                 boolean star = starSwitch;
                 boolean lock = lockSwitch;
                 long timeStamp = System.currentTimeMillis();
-                if (title.trim().isEmpty() && content.trim().isEmpty()) {
-                    Log.i(TAG, "memo null");
+
+                // 외부라이브러리에서 TextNull은 TextUtils.isEmpty로 해야 함.
+                if (title.trim().equals("") && TextUtils.isEmpty(content)) {
                     finish();
 
                 } else {
@@ -115,6 +127,8 @@ public class WriteActivity extends AppCompatActivity {
                             memoDao.insert(memo);
                             Log.i(TAG, "memo completed");
                             Log.i(TAG, "list:" + memoDao.getAll() + "");
+
+                            Toast.makeText(WriteActivity.this, "저장되었습니다.", Toast.LENGTH_SHORT).show();
 
                             Intent intent = new Intent(WriteActivity.this, MainActivity.class);
                             startActivity(intent);
