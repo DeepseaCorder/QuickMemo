@@ -1,7 +1,10 @@
 package com.puresoftware.quickmemo.floating;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Build;
@@ -17,6 +20,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationCompat;
 
 import com.puresoftware.quickmemo.R;
 
@@ -45,8 +50,20 @@ public class WidgetService extends Service {
         return null;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
+        // startForground에러나 bad Notification 관련 에러로 인한 Notification 만듬(숙지 안됨)
+        // https://ddolcat.tistory.com/259
+        String CHANNEL_ID = "channel_1";
+        NotificationChannel channel = new NotificationChannel(CHANNEL_ID,"Andorid test", NotificationManager.IMPORTANCE_LOW);
+        ((NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
+
+        Notification notification = new NotificationCompat.Builder(this,CHANNEL_ID)
+                .setContentTitle("").setContentText("").build();
+        startForeground(2,notification);
+        // https://ddolcat.tistory.com/259
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

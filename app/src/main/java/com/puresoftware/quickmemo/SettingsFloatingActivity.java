@@ -32,7 +32,8 @@ public class SettingsFloatingActivity extends PreferenceActivity {
     Intent intent; // 서비스를 위한 인텐트
     String TAG = SettingsFloatingActivity.class.getSimpleName();
 
-//    SharedPreferences settings = getSharedPreferences("floating_status", MODE_PRIVATE);
+    SharedPreferences settings;
+    SharedPreferences.Editor settingsEditor;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -40,16 +41,14 @@ public class SettingsFloatingActivity extends PreferenceActivity {
         String key = preference.getKey();
         Log.d(TAG, "클릭된 Preference의 value는 " + key);
 
-//        SharedPreferences.Editor editor = settings.edit();
-
         // 기본 플로팅 모드와 앱 선택 플로팅 모드
         switch (key) {
             case "floating_default": // 기본 플로팅
                 if (intent != null) { // 스위치가 켜저 있다면 인텐트는 그대로 유지되고 있다.
                     stopService(intent);
                     startService(intent);
-//                    editor.putString("mode", "default");
-//                    editor.commit();
+                    settingsEditor.putString("mode", "default");
+                    settingsEditor.commit();
                 }
                 break;
 
@@ -61,8 +60,8 @@ public class SettingsFloatingActivity extends PreferenceActivity {
                     i.setType("text/plain");
                     startActivity(Intent.createChooser(i, "실행"));
 
-//                    editor.putString("mode", "difference");
-//                    editor.commit();
+                    settingsEditor.putString("mode", "difference");
+                    settingsEditor.commit();
                 }
             default:
                 break;
@@ -76,6 +75,10 @@ public class SettingsFloatingActivity extends PreferenceActivity {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.settings_floating);
 
+//설정값을 위한 프리퍼런스
+        settings = getSharedPreferences("floating_status", MODE_PRIVATE);
+        settingsEditor = settings.edit();
+
         // 값이 변경되었을 때 머시기하는거라는데 잘 모름.
         SharedPreferences prefs;
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -84,8 +87,6 @@ public class SettingsFloatingActivity extends PreferenceActivity {
                     @RequiresApi(api = Build.VERSION_CODES.M)
                     public void onSharedPreferenceChanged(SharedPreferences sp, String key) {
                         Log.i(TAG, "클릭된 Preference의 key는 " + key);
-
-//                        SharedPreferences.Editor editor = settings.edit(); // 부트 서비스에 쓸 상태값 저장
 
                         // 스위치 상태가 켜짐이라면 켜기
                         if (sp.getBoolean("floating_status", true)) {
@@ -98,8 +99,8 @@ public class SettingsFloatingActivity extends PreferenceActivity {
                             } else {
                                 intent = new Intent(SettingsFloatingActivity.this, WidgetService.class);
                             }
-//                            editor.putString("status", "true");
-//                            editor.commit();
+                            settingsEditor.putString("status", "true");
+                            settingsEditor.commit();
 
                             // 스위치 상태가 꺼짐이라면 끄고, 인텐트 객체도 null 하기.
                         } else {
@@ -109,8 +110,8 @@ public class SettingsFloatingActivity extends PreferenceActivity {
                                 stopService(intent);
                                 intent = null;
 
-//                                editor.putString("status", "false");
-//                                editor.commit();
+                                settingsEditor.putString("status", "false");
+                                settingsEditor.commit();
                             }
                         }
                     }
