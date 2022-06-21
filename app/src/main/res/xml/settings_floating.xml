@@ -4,22 +4,21 @@
     <SwitchPreference
         android:defaultValue="false"
         android:key="floating_status"
-        android:title="해당 기능을 실행합니다."
-        />
+        android:title="해당 기능을 실행합니다." />
 
     <Preference
         android:defaultValue="false"
         android:dependency="floating_status"
         android:key="floating_default"
-        android:summary="다른 앱으로 설정이 가능합니다.
-주의! 원래대로 하려면 “기본 메모앱으로 설정”하세요."
+        android:summary=""
         android:title="기본 메모앱으로 설정" />
 
     <Preference
         android:defaultValue="false"
         android:dependency="floating_status"
         android:key="floating_difference"
-        android:summary="원래 메모 앱으로 설정합니다."
+        android:summary="다른 메모앱으로 플로팅을 통해 실행이 가능합니다..
+주의! 원래대로 하려면 “기본 메모앱으로 설정”하세요."
         android:title="다른 메모앱으로 설정"
 
         />
