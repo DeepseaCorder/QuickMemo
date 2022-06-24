@@ -44,7 +44,7 @@
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"
-                android:layout_height="320dp"
+                android:layout_height="wrap_content"
                 android:background="#F1F1F1"
                 android:fitsSystemWindows="true"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
@@ -62,14 +62,14 @@
                     <LinearLayout
                         android:id="@+id/lin_main_infate_top_card1"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
                         android:layout_weight="1"
                         android:orientation="horizontal" />
 
                     <LinearLayout
                         android:id="@+id/lin_main_infate_top_card2"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
                         android:layout_weight="1"
                         android:orientation="horizontal" />
 

@@ -128,7 +128,13 @@ public class WriteActivity extends AppCompatActivity {
                             Log.i(TAG, "memo completed");
                             Log.i(TAG, "list:" + memoDao.getAll() + "");
 
-                            Toast.makeText(WriteActivity.this, "저장되었습니다.", Toast.LENGTH_SHORT).show();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(WriteActivity.this, "저장되었습니다.", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
 
                             Intent intent = new Intent(WriteActivity.this, MainActivity.class);
                             startActivity(intent);

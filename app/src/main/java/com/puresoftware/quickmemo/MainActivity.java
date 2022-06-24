@@ -52,6 +52,7 @@ public class MainActivity extends Activity {
     List<Memo> memos;
     Memo lastMemo;
     Memo secondMemo;
+    TextView tvMainCardCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +64,7 @@ public class MainActivity extends Activity {
         drawerView = (View) findViewById(R.id.v_main_drawer);
         fbtnWrite = findViewById(R.id.fbtn_main_write);
         btnSearch = findViewById(R.id.btn_main_search);
+        tvMainCardCount = findViewById(R.id.tv_main_card_count);
 
 
         // NavigationView navigationView = (NavigationView) findViewById(R.id.main_navi_view);
@@ -105,15 +107,16 @@ public class MainActivity extends Activity {
                 //향상된 for문
 
                 if (memos.size() <= 0) {
+
                     return;
                 }
                 lastMemo = memos.get(memos.size() - 1);
                 recentStamp = lastMemo.timestamp;
 
                 // firstView
-                TextView tvTopCardTitle = firstView.findViewById(R.id.tv_main_impo_card_title);
-                TextView tvTopCardDate = firstView.findViewById(R.id.tv_main_impo_card_date);
-                RichEditor tvTopCardContent = firstView.findViewById(R.id.tv_main_impo_card_content);
+                TextView tvTopCardTitle = firstView.findViewById(R.id.tv_main_last_card_title);
+                TextView tvTopCardDate = firstView.findViewById(R.id.tv_main_last_card_date);
+                RichEditor tvTopCardContent = firstView.findViewById(R.id.tv_main_last_card_content);
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd a H:mm", Locale.KOREA);
 
                 tvTopCardTitle.setText(lastMemo.title);
@@ -145,16 +148,24 @@ public class MainActivity extends Activity {
                     starList = memos.stream().filter(memo -> memo.star == true).collect(Collectors.toList());
                 }
 
-                secondMemo = starList.get(starList.size() - 1);
-                tvImportantCardTitle.setText(secondMemo.title);
-                tvImportantCardDate.setText(sdf.format(secondMemo.timestamp));
-                tvImportantCardContent.setHtml(secondMemo.content);
+                if (starList.size() > 0) {
 
-                if (secondMemo.lock == true) {
-                    tvImportantCardLock.setVisibility(View.VISIBLE);
-                    tvImportantCardLock.setText("잠금");
+                    secondMemo = starList.get(starList.size() - 1);
+                    tvImportantCardTitle.setText(secondMemo.title);
+                    tvImportantCardDate.setText(sdf.format(secondMemo.timestamp));
+                    tvImportantCardContent.setHtml(secondMemo.content);
+                    linTopcard2.setVisibility(View.GONE);
+
+                    if (secondMemo.lock == true) {
+                        tvImportantCardLock.setVisibility(View.VISIBLE);
+                        tvImportantCardLock.setText("잠금");
+                    }
+
+                } else {
+                    linTopcard2.setVisibility(View.GONE);
                 }
             }
+
         }).start();
 
         // 카드 메뉴
@@ -164,39 +175,42 @@ public class MainActivity extends Activity {
         recyclerView.setLayoutManager(staggeredGridLayoutManager);
 
         Adapter adapter = new Adapter();
-        for (int i = 0; i < 100; i = i + 2) {
-            String left = i + "번째 아이템";
-            String right = (i + 1) + "번째 아이템";
-            adapter.setArrayData(left, right);
+
+        if (memos.size() > 0) {
+            tvMainCardCount.setText(memos.size() + "개의 메모");
+            Log.i(TAG, "memosize:" + memos.size());
+
+//            adapter.setArrayData();
+
+//            adapter.setArrayData();
+
+        }else{
+
         }
+
+
         recyclerView.setAdapter(adapter);
 
-        // 최근 카드
+        // 최근 카드 (last)
         linTopcard1.setOnClickListener(new View.OnClickListener() {
             @Override
 
             public void onClick(View view) {
-                if (lastMemo != null) {
-                    editActivityIntent(lastMemo.title, lastMemo.content, lastMemo.timestamp, lastMemo.star, lastMemo.lock);
-                }
-
+                editActivityIntent(lastMemo.title, lastMemo.content, lastMemo.timestamp, lastMemo.star, lastMemo.lock);
             }
         });
 
-        // 중요 카드
+        // 중요 카드 (second)
         linTopcard2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (lastMemo != null) {
-                    editActivityIntent(secondMemo.title, secondMemo.content, secondMemo.timestamp, secondMemo.star, secondMemo.lock);
-                }
+                editActivityIntent(secondMemo.title, secondMemo.content, secondMemo.timestamp, secondMemo.star, secondMemo.lock);
             }
         });
 
         recyclerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
             }
         });
 

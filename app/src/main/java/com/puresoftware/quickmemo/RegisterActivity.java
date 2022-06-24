@@ -236,7 +236,7 @@ public class RegisterActivity extends AppCompatActivity {
 //
 //        for(int i = 0; i<=4; i++){
 //            if(errorNumber.contains(String.valueOf(i))){
-//
+//r
 //            }
 //
 //

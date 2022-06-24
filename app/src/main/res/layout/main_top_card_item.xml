@@ -28,7 +28,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/tv_main_impo_card_title"
+                        android:id="@+id/tv_main_last_card_title"
                         android:layout_width="match_parent"
                         android:layout_height="25dp"
                         android:layout_marginLeft="16dp"
@@ -40,7 +40,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_main_impo_card_date"
+                        android:id="@+id/tv_main_last_card_date"
 
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -76,7 +76,7 @@
             </LinearLayout>
 
             <jp.wasabeef.richeditor.RichEditor
-                android:id="@+id/tv_main_impo_card_content"
+                android:id="@+id/tv_main_last_card_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
