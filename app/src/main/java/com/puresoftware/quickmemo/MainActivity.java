@@ -22,6 +22,7 @@ import com.puresoftware.quickmemo.room.MemoDao;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.BlockingDeque;
@@ -52,6 +53,7 @@ public class MainActivity extends Activity {
     List<Memo> memos;
     Memo lastMemo;
     Memo secondMemo;
+    Memo memo;
     TextView tvMainCardCount;
 
     @Override
@@ -131,6 +133,7 @@ public class MainActivity extends Activity {
                 RichEditor tvImportantCardContent = secondView.findViewById(R.id.tv_main_impo_card_content);
                 tvImportantCardContent.setInputEnabled(false);
 
+
                 List<Memo> starList = new ArrayList<>();
 //
 //                // 초보자용 코드
@@ -154,7 +157,6 @@ public class MainActivity extends Activity {
                     tvImportantCardTitle.setText(secondMemo.title);
                     tvImportantCardDate.setText(sdf.format(secondMemo.timestamp));
                     tvImportantCardContent.setHtml(secondMemo.content);
-                    linTopcard2.setVisibility(View.GONE);
 
                     if (secondMemo.lock == true) {
                         tvImportantCardLock.setVisibility(View.VISIBLE);
@@ -166,12 +168,13 @@ public class MainActivity extends Activity {
                 }
             }
 
+
         }).start();
 
         // 카드 메뉴
         RecyclerView recyclerView = findViewById(R.id.rec_main_card);
         StaggeredGridLayoutManager staggeredGridLayoutManager
-                = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
+                = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(staggeredGridLayoutManager);
 
         Adapter adapter = new Adapter();
@@ -180,11 +183,56 @@ public class MainActivity extends Activity {
             tvMainCardCount.setText(memos.size() + "개의 메모");
             Log.i(TAG, "memosize:" + memos.size());
 
-//            adapter.setArrayData();
+            // 같으면 왼쪽에 데이터를, 다르면 오른쪽에 데이터를 넣는 방식으로 한다.
+            int left = 0;
+            int right = 0;
+
+            for (int i = 0; i < memos.size(); i++) {
+
+                Log.i(TAG, "memonum:" + memos.get(0));
+                memo = new Memo();
+                memo.title = memos.get(i).title;
+                memo.content = memos.get(i).content;
+                memo.timestamp = memos.get(i).timestamp;
+                memo.lock = memos.get(i).lock;
+                memo.star = memos.get(i).star;
+                adapter.setArrayData(memo);
+
+//                if (left == right) {
+//                    adapter.setLeftDatas(memo);
+//                    left = ++left;
+//                    Log.i(TAG,"leftmemotype:"+memo.title);
+//                } else {
+//                    adapter.setRightDatas(memo);
+//                    right = ++right;
+//                    Log.i(TAG,"rightmemotype:"+memo.title);
+//                }
+
+                // i,u
+                // 데이터가 없으면 i는 0 u는 0 = 서로가 같은 상황
+                // 1번 데이터를 넣고 i는 1 u는 0 // 홀수
+
+
+                // 2번 데이터를 넣고 i는 1 u는 1 // 짝수
+                // 3번 데이터를 넣고 i는 2 u는 1
+
+//                memo = new Memo();
+//                memo.title = memos.get(i).title;
+//                memo.content = memos.get(i).content;
+//                memo.timestamp = memos.get(i).timestamp;
+//                memo.lock= memos.get(i).lock;
+//                memo.star = memos.get(i).star;
+////
+//                adapter.setDatas(memo);
+
+
+            }
 
 //            adapter.setArrayData();
 
-        }else{
+//            adapter.setArrayData();
+
+        } else {
 
         }
 

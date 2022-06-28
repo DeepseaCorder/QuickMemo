@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,22 +14,27 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.puresoftware.quickmemo.artifacts.HomeDO;
+import com.puresoftware.quickmemo.room.Memo;
 
 import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
+
+import jp.wasabeef.richeditor.RichEditor;
 
 
 public class MainViewHolder extends RecyclerView.ViewHolder {
 
-    LinearLayout viewMainCard;
+    FrameLayout viewMainCard;
     TextView tvDateLeft;
     TextView tvTitleLeft;
-    TextView tvContentLeft;
+    RichEditor tvContentLeft;
 
-    TextView tvDateRight;
-    TextView tvTitleRight;
-    TextView tvContenRight;
+//    TextView tvDateRight;
+//    TextView tvTitleRight;
+//    TextView tvContentRight;
 
     String TAG = MainViewHolder.class.getSimpleName();
 
@@ -37,11 +43,11 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
 
         tvTitleLeft = itemView.findViewById(R.id.tv_main_card_title_left);
         tvDateLeft = itemView.findViewById(R.id.tv_main_card_date_left);
-        tvContentLeft = itemView.findViewById(R.id.tv_main_card_content_left);
+        tvContentLeft = itemView.findViewById(R.id.tv_main_card_content);
 
-        tvTitleRight = itemView.findViewById(R.id.tv_main_card_title_right);
-        tvDateLeft = itemView.findViewById(R.id.tv_main_card_date_right);
-        tvContentLeft = itemView.findViewById(R.id.tv_main_card_content_right);
+//        tvTitleRight = itemView.findViewById(R.id.tv_main_card_title_right);
+//        tvDateRight = itemView.findViewById(R.id.tv_main_card_date_right);
+//        tvContentRight = itemView.findViewById(R.id.tv_main_card_content_right);
 
         viewMainCard = itemView.findViewById(R.id.view_main_card);
 
@@ -56,7 +62,7 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
                 // 포지션 값
                 if (position != RecyclerView.NO_POSITION) {
                     Log.i(TAG, tvTitleLeft.getText().toString());
-                    Log.i(TAG, tvTitleRight.getText().toString());
+//                    Log.i(TAG, tvTitleRight.getText().toString());
                 }
 
             }
@@ -67,7 +73,8 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
 
 class Adapter extends RecyclerView.Adapter<MainViewHolder> {
 
-    ArrayList<HomeDO> datas = new ArrayList<>();
+    ArrayList<Memo> datas = new ArrayList<>();
+//    ArrayList<HomeDO> datas = new ArrayList<>();
 
     interface OnItemClickListener {
         void onItemClick(View v, int position); // 그런 걸 보여준다.
@@ -93,10 +100,15 @@ class Adapter extends RecyclerView.Adapter<MainViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MainViewHolder holder, int position) {
-        HomeDO obj = datas.get(position);
+        datas.get(position);
+        Log.i("TAG", "position:" + position); // 반복문 체계로 돌아가는 메소드임이 확실함.
 
-        holder.tvTitleLeft.setText(obj.getLeftTitle());
-        holder.tvTitleRight.setText(obj.getRightTitle());
+        holder.tvTitleLeft.setText(datas.get(position).title);
+        holder.tvContentLeft.setHtml(datas.get(position).content);
+        holder.tvContentLeft.setInputEnabled(false);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd a H:mm", Locale.KOREA);
+        holder.tvDateLeft.setText(sdf.format(datas.get(position).timestamp));
+        sdf = null;
 
 
     }
@@ -107,8 +119,14 @@ class Adapter extends RecyclerView.Adapter<MainViewHolder> {
     }
 
     // ListView Adapter에서 만드는 MainActivity에서 Data를 가져오는 메소드 생성
-    public void setArrayData(String left, String right) {
-        HomeDO obj = new HomeDO(left, right);
-        datas.add(obj);
+    public void setArrayData(Memo memo) {
+
+        datas.add(memo);
     }
+
+
+//    public void setArrayData(String left, String right) {
+//        HomeDO obj = new HomeDO(left, right);
+//        datas.add(obj);
+//    }
 }

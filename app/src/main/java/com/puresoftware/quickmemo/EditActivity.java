@@ -150,11 +150,14 @@ public class EditActivity extends AppCompatActivity {
                             memo.star = star;
                             memo.timestamp = timeStamp;
 
-                            memoDao.delete(beforeMemo);
+//                            memoDao.delete(beforeMemo);
+//
+//
+//                            memoDao.insert(memo);
+//                            Log.i(TAG, "memo completed");
+//                            Log.i(TAG, "list:" + memoDao.getAll() + "");
 
-                            memoDao.insert(memo);
-                            Log.i(TAG, "memo completed");
-                            Log.i(TAG, "list:" + memoDao.getAll() + "");
+                            memoDao.update(memo);
 
                             Intent intent = new Intent(EditActivity.this, MainActivity.class);
                             startActivity(intent);
