@@ -40,6 +40,7 @@ public class MainActivity extends Activity {
     ImageView btnMenu;
     FloatingActionButton fbtnWrite;
     ImageView btnSearch;
+    ImageView vEmpty;
 
     TextView tvDrawerTitle;
     TextView tvDrawerEmail;
@@ -67,6 +68,7 @@ public class MainActivity extends Activity {
         fbtnWrite = findViewById(R.id.fbtn_main_write);
         btnSearch = findViewById(R.id.btn_main_search);
         tvMainCardCount = findViewById(R.id.tv_main_card_count);
+        vEmpty = findViewById(R.id.v_main_empty);
 
 
         // NavigationView navigationView = (NavigationView) findViewById(R.id.main_navi_view);
@@ -109,6 +111,8 @@ public class MainActivity extends Activity {
                 //향상된 for문
 
                 if (memos.size() <= 0) {
+                    linTopcard1.setVisibility(View.GONE);
+                    linTopcard2.setVisibility(View.GONE);
 
                     return;
                 }
@@ -182,6 +186,7 @@ public class MainActivity extends Activity {
         if (memos.size() > 0) {
             tvMainCardCount.setText(memos.size() + "개의 메모");
             Log.i(TAG, "memosize:" + memos.size());
+            vEmpty.setVisibility(View.GONE); // 비어 있음 이미지 끄기
 
             // 같으면 왼쪽에 데이터를, 다르면 오른쪽에 데이터를 넣는 방식으로 한다.
             int left = 0;
@@ -197,43 +202,9 @@ public class MainActivity extends Activity {
                 memo.lock = memos.get(i).lock;
                 memo.star = memos.get(i).star;
                 adapter.setArrayData(memo);
-
-//                if (left == right) {
-//                    adapter.setLeftDatas(memo);
-//                    left = ++left;
-//                    Log.i(TAG,"leftmemotype:"+memo.title);
-//                } else {
-//                    adapter.setRightDatas(memo);
-//                    right = ++right;
-//                    Log.i(TAG,"rightmemotype:"+memo.title);
-//                }
-
-                // i,u
-                // 데이터가 없으면 i는 0 u는 0 = 서로가 같은 상황
-                // 1번 데이터를 넣고 i는 1 u는 0 // 홀수
-
-
-                // 2번 데이터를 넣고 i는 1 u는 1 // 짝수
-                // 3번 데이터를 넣고 i는 2 u는 1
-
-//                memo = new Memo();
-//                memo.title = memos.get(i).title;
-//                memo.content = memos.get(i).content;
-//                memo.timestamp = memos.get(i).timestamp;
-//                memo.lock= memos.get(i).lock;
-//                memo.star = memos.get(i).star;
-////
-//                adapter.setDatas(memo);
-
-
             }
-
-//            adapter.setArrayData();
-
-//            adapter.setArrayData();
-
         } else {
-
+            vEmpty.setVisibility(View.VISIBLE); // 비어있음 이미지 켜기
         }
 
 

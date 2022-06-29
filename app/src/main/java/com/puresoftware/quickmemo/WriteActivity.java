@@ -434,5 +434,15 @@ public class WriteActivity extends AppCompatActivity {
                 }
             }
         });
+
+        onBackPressed();
+
+
+        richEditor.setOnTextChangeListener(new RichEditor.OnTextChangeListener() {
+            @Override
+            public void onTextChange(String text) {
+                Log.i(TAG, "change:" + richEditor.getHtml());
+            }
+        });
     }
 }

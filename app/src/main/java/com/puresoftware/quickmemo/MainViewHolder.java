@@ -100,6 +100,7 @@ class Adapter extends RecyclerView.Adapter<MainViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MainViewHolder holder, int position) {
+
         datas.get(position);
         Log.i("TAG", "position:" + position); // 반복문 체계로 돌아가는 메소드임이 확실함.
 
