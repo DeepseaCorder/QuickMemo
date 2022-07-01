@@ -135,8 +135,10 @@ public class EditActivity extends AppCompatActivity {
                 Log.i(TAG, "insereted- " + "title:" + title + ",content:" + content + ",timestamp:" + timeStamp + ",star:" + star + ",lock" + lock);
 
                 if (title.trim().isEmpty() && content.trim().isEmpty()) {
-                    Log.i(TAG, "memo null");
+                    Intent intent = new Intent(EditActivity.this, MainActivity.class);
+                    startActivity(intent);
                     finish();
+                    Log.i(TAG, "memo null");
 
                 } else {
                     new Thread(new Runnable() {
@@ -149,14 +151,6 @@ public class EditActivity extends AppCompatActivity {
                             memo.lock = lock;
                             memo.star = star;
                             memo.timestamp = timeStamp;
-
-//                            memoDao.delete(beforeMemo);
-//
-//
-//                            memoDao.insert(memo);
-//                            Log.i(TAG, "memo completed");
-//                            Log.i(TAG, "list:" + memoDao.getAll() + "");
-
                             memoDao.update(memo);
 
                             Intent intent = new Intent(EditActivity.this, MainActivity.class);

@@ -144,6 +144,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/main___empty"
+            android:visibility="gone"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
             ></ImageView>
 
