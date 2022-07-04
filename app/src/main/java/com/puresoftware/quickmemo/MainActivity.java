@@ -4,6 +4,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
@@ -12,11 +13,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.puresoftware.quickmemo.room.AppDatabase;
 import com.puresoftware.quickmemo.room.Memo;
@@ -58,6 +62,7 @@ public class MainActivity extends Activity {
     Memo secondMemo;
     Memo memo;
     TextView tvMainCardCount;
+//    Activity activity = MainActivity.this; // ViewHolder에 전달할 액티비티
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,9 +76,6 @@ public class MainActivity extends Activity {
         btnSearch = findViewById(R.id.btn_main_search);
         tvMainCardCount = findViewById(R.id.tv_main_card_count);
         vEmpty = findViewById(R.id.v_main_empty);
-
-
-        // NavigationView navigationView = (NavigationView) findViewById(R.id.main_navi_view);
 
         // DrawerLayout 내 오브젝트
         tvDrawerTitle = drawerView.findViewById(R.id.tv_main_drawer_custom_ID);
@@ -89,6 +91,11 @@ public class MainActivity extends Activity {
             @Override
             public void run() {
                 memos = memoDao.getAll();
+
+                // 배포할 때에는 이 코드 끄기.
+                for (Memo memo : memos) {
+                    Log.i(TAG, "memoDatas:" + memo.toString());
+                }
             }
         }).start();
 
@@ -119,12 +126,14 @@ public class MainActivity extends Activity {
                     return;
                 }
                 lastMemo = memos.get(memos.size() - 1);
-                Log.i("lock", "lock" + lastMemo.lock);
                 recentStamp = lastMemo.timestamp;
+
+                Log.i("lock", "lock" + lastMemo.lock);
 
                 // firstView
                 TextView tvTopCardTitle = firstView.findViewById(R.id.tv_main_last_card_title);
                 TextView tvTopCardDate = firstView.findViewById(R.id.tv_main_last_card_date);
+                TextView tvTopCardLock = firstView.findViewById(R.id.tv_main_top_card_last_lock);
                 RichEditor tvTopCardContent = firstView.findViewById(R.id.tv_main_last_card_content);
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd a H:mm", Locale.KOREA);
 
@@ -132,11 +141,13 @@ public class MainActivity extends Activity {
                     tvTopCardTitle.setText(lastMemo.title);
                     tvTopCardContent.setHtml("");
                     tvTopCardDate.setText(sdf.format(lastMemo.timestamp));
+                    tvTopCardLock.setVisibility(View.VISIBLE);
 
                 } else {
                     tvTopCardTitle.setText(lastMemo.title);
                     tvTopCardContent.setHtml(lastMemo.content);
                     tvTopCardDate.setText(sdf.format(lastMemo.timestamp));
+                    tvTopCardLock.setVisibility(View.GONE);
                 }
 
                 tvTopCardContent.setInputEnabled(false);
@@ -172,14 +183,15 @@ public class MainActivity extends Activity {
 
                     if (secondMemo.lock == true) {
                         tvImportantCardLock.setVisibility(View.VISIBLE);
-                        tvImportantCardLock.setText("잠금");
                         tvImportantCardTitle.setText(secondMemo.title);
                         tvImportantCardDate.setText(sdf.format(secondMemo.timestamp));
+                        tvImportantCardLock.setVisibility(View.VISIBLE);
 
                     } else {
                         tvImportantCardTitle.setText(secondMemo.title);
                         tvImportantCardDate.setText(sdf.format(secondMemo.timestamp));
                         tvImportantCardContent.setHtml(secondMemo.content);
+                        tvImportantCardLock.setVisibility(View.GONE);
                     }
                     linTopcard2.setVisibility(View.VISIBLE); // 메모 전시
 
@@ -201,16 +213,10 @@ public class MainActivity extends Activity {
 
         if (memos.size() > 0) {
             tvMainCardCount.setText(memos.size() + "개의 메모");
-            Log.i(TAG, "memosize:" + memos.size());
             vEmpty.setVisibility(View.GONE); // 비어 있음 이미지 끄기
-
-            // 같으면 왼쪽에 데이터를, 다르면 오른쪽에 데이터를 넣는 방식으로 한다.
-            int left = 0;
-            int right = 0;
 
             for (int i = 0; i < memos.size(); i++) {
 
-                Log.i(TAG, "memonum:" + memos.get(0));
                 memo = new Memo();
                 memo.title = memos.get(i).title;
                 memo.content = memos.get(i).content;
@@ -218,7 +224,24 @@ public class MainActivity extends Activity {
                 memo.lock = memos.get(i).lock;
                 memo.star = memos.get(i).star;
                 adapter.setArrayData(memo);
+//                adapter.getMainActivity(activity);
             }
+
+//            int size = memos.size();
+//
+//            for (int i = size; size< 1; i--) {
+//                Log.i("gugu", "I는:" + i);
+//
+//                memo = new Memo();
+//                memo.title = memos.get(i).title;
+//                memo.content = memos.get(i).content;
+//                memo.timestamp = memos.get(i).timestamp;
+//                memo.lock = memos.get(i).lock;
+//                memo.star = memos.get(i).star;
+//                adapter.setArrayData(memo);
+//            }
+
+
         } else {
             vEmpty.setVisibility(View.VISIBLE); // 비어있음 이미지 켜기
         }
@@ -247,8 +270,30 @@ public class MainActivity extends Activity {
 
         // 검색
         btnSearch.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("RestrictedApi")
             @Override
             public void onClick(View view) {
+
+                // appbar는 부모가 linear,col머시기는 부모가 frame
+//                FrameLayout appBarLayout = findViewById(R.id.appbar_layout);
+                CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collaspig_layout);
+//                Log.i("gugu", "colling:" +);
+//                Log.i("gugu", collapsingToolbarLayout.getHeight() + "");
+
+                AppBarLayout appBarLayout = findViewById(R.id.appbar_layout);
+//                collapsingToolbarLayout.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+//                    @Override
+//                    public void onLayoutChange(View view, int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
+//                        Log.i("gugu",i+","+i1+","+i2+","+i3+","+i4+","+i5+","+i6+","+i7);
+//                    }
+//                });
+//                Log.i("gugu", appBarLayout.getHeight() + "");
+
+
+                // 우선은 움직일때마다 변경될 값을 리스너로 받는다.
+                // 리스너 안에서 0dp로 주어져야 또는 -1로 처리하면 애니메이션이 처리될 것 같다.
+
+
             }
         });
 
@@ -307,17 +352,19 @@ public class MainActivity extends Activity {
 
         // 락 모드가 true면 PIN을 입력하는 곳으로 가기.
         if (memo.lock == true) {
-            intent = new Intent(MainActivity.this, PINActivity.class);
+            intent.setClass(MainActivity.this, PINActivity.class);
             startActivity(intent);
             finish();
 
             // 락 모드가 false면 바로 수정창으로 가기.
         } else {
-            intent = new Intent(MainActivity.this, EditActivity.class);
+            intent.setClass(MainActivity.this, EditActivity.class);
             startActivity(intent);
             finish();
         }
     }
+
+
 }
 
 // 모든 인텐트에 startActivity > finish를 해야 하는 이유

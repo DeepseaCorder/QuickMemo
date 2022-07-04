@@ -15,22 +15,24 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.QuickMemo">
         <activity
-            android:name=".RichTextEditorActivity"
+            android:name=".sample.SampleAcivity"
             android:exported="true"></activity>
         <activity
+            android:name=".RichTextEditorActivity"
+            android:exported="true" />
+        <activity
             android:name=".WebTestActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".WriteActivity"
             android:exported="false" />
-
         <activity
             android:name=".EditActivity"
             android:exported="false" />
-
         <activity
             android:name=".PINActivity"
-            android:exported="false" />
+            android:exported="false"
+            />
 
         <activity
             android:name=".ResetPasswordActivity"
@@ -43,7 +45,7 @@
             android:exported="true" />
         <activity
             android:name=".LoginActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".SettingsFloatingActivity"
             android:exported="false"
@@ -54,17 +56,16 @@
             android:exported="true" />
         <activity
             android:name=".SplashActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".MainActivity"
-            android:exported="true">
 
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
 
         <service
@@ -80,8 +81,7 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
 
-            <!-- build android 12부터는 exported true를 통해 서비스 접근을 얻어야 한다.-->
-
+            <!-- build android 12부터는 exported true를 통해 서비스 접근을 얻어야 한다. -->
 
         </receiver>
     </application>

@@ -42,7 +42,11 @@ public interface MemoDao {
     @Delete
     void delete(Memo memo);
 
-    @Update
-    void update(Memo memo);
+//    // update 테이블명 set 컬럼1=값1, 컬럼2=값2
+//    @Query("UPDATE user set first_name=:first where uid=:uid")
+//    void updateFirstName(int uid, String first);
+
+    @Query("UPDATE Memo set title=:title,content=:content,star=:star,lock=:lock where timestamp=:timeStamp")
+    void updateData(String title, String content, boolean star, boolean lock, long timeStamp);
 
 }

@@ -73,6 +73,21 @@
                         android:textColor="#FFCBCB"
                         android:textSize="14sp"
                         android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_main_top_card_last_lock"
+                        android:layout_width="wrap_content"
+                        android:layout_height="25dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_weight="1"
+                        android:text="잠김"
+                        android:textAlignment="viewEnd"
+                        android:textColor="#FF6D6D"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
+
                 </LinearLayout>
 
             </LinearLayout>

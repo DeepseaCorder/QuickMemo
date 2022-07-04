@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -91,11 +92,6 @@ public class EditActivity extends AppCompatActivity {
         beforeMemo.timestamp = intent.getLongExtra("timestamp", 0);
         beforeMemo.star = intent.getBooleanExtra("star", false);
         beforeMemo.lock = intent.getBooleanExtra("lock", false);
-        Log.i(TAG, "loaded- " + "title:" + beforeMemo.title +
-                ",content:" + beforeMemo.content +
-                ",timestamp:" + beforeMemo.timestamp +
-                ",star:" + beforeMemo.star +
-                ",lock" + beforeMemo.lock);
 
         //데이터 셋업
         edtTitle.setText(beforeMemo.title);
@@ -127,17 +123,17 @@ public class EditActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                String title = edtTitle.getText().toString().trim();
-                String content = richEditor.getHtml();
-                boolean star = starSwitch;
-                boolean lock = lockSwitch;
-                long timeStamp = System.currentTimeMillis();
-                Log.i(TAG, "insereted- " + "title:" + title + ",content:" + content + ",timestamp:" + timeStamp + ",star:" + star + ",lock" + lock);
+                String afterTitle = edtTitle.getText().toString();
+                String afterContent = richEditor.getHtml();
+                boolean afterStar = starSwitch;
+                boolean afterLock = lockSwitch;
+                long afterTimeStamp = System.currentTimeMillis();
 
-                if (title.trim().isEmpty() && content.trim().isEmpty()) {
+                if (afterTitle.trim().isEmpty() && afterContent.trim().isEmpty()) {
                     Intent intent = new Intent(EditActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();
+
                     Log.i(TAG, "memo null");
 
                 } else {
@@ -146,12 +142,16 @@ public class EditActivity extends AppCompatActivity {
                         public void run() {
                             Memo memo = new Memo();
 
-                            memo.title = title;
-                            memo.content = content;
-                            memo.lock = lock;
-                            memo.star = star;
-                            memo.timestamp = timeStamp;
-                            memoDao.update(memo);
+                            memo.title = afterTitle;
+                            memo.content = afterContent;
+                            memo.lock = afterLock;
+                            memo.star = afterStar;
+                            memo.timestamp = beforeMemo.timestamp;
+                            memoDao.updateData(memo.title, memo.content, memo.star, memo.lock, memo.timestamp);
+
+                            Log.i(TAG, "BeforeData:" + beforeMemo.toString() + '\n' + "↓ ↓ ↓ ↓ ↓");
+                            Log.i(TAG, "AfterData:" + memo.toString());
+                            Log.i(TAG, "memo updated");
 
                             Intent intent = new Intent(EditActivity.this, MainActivity.class);
                             startActivity(intent);
@@ -452,5 +452,11 @@ public class EditActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        btnBack.callOnClick();
+        super.onBackPressed();
     }
 }

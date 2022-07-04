@@ -113,6 +113,7 @@ public class WriteActivity extends AppCompatActivity {
                     Intent intent = new Intent(WriteActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();
+
                     Log.i(TAG, "memo null");
 
                 } else {
@@ -126,10 +127,10 @@ public class WriteActivity extends AppCompatActivity {
                             memo.lock = lock;
                             memo.star = star;
                             memo.timestamp = timeStamp;
-
                             memoDao.insert(memo);
+
+                            Log.i(TAG, "memoData:" + memo.toString());
                             Log.i(TAG, "memo completed");
-                            Log.i(TAG, "list:" + memoDao.getAll() + "");
 
                             runOnUiThread(new Runnable() {
                                 @Override
@@ -137,8 +138,6 @@ public class WriteActivity extends AppCompatActivity {
                                     Toast.makeText(WriteActivity.this, "저장되었습니다.", Toast.LENGTH_SHORT).show();
                                 }
                             });
-
-
                             Intent intent = new Intent(WriteActivity.this, MainActivity.class);
                             startActivity(intent);
                             finish();
@@ -437,12 +436,11 @@ public class WriteActivity extends AppCompatActivity {
                 }
             }
         });
+    }
 
-        richEditor.setOnTextChangeListener(new RichEditor.OnTextChangeListener() {
-            @Override
-            public void onTextChange(String text) {
-                Log.i(TAG, "change:" + richEditor.getHtml());
-            }
-        });
+    @Override
+    public void onBackPressed() {
+        btnBack.callOnClick();
+        super.onBackPressed();
     }
 }
