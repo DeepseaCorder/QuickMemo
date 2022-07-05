@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/drawable/ic_bars_solid.xml" value="0.26979166666666665" />
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/drawable/ic_baseline_delete_outline_24.xml" value="0.17039473684210527" />
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/drawable/ic_baseline_delete_outline_select24.xml" value="0.17039473684210527" />
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/drawable/ic_bold_selected.xml" value="0.24144736842105263" />
@@ -26,7 +27,7 @@
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/drawable/write_activity_edit_textline.xml" value="0.24144736842105263" />
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/drawable/write_activity_menu_popup.xml" value="0.24144736842105263" />
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/layout/activity_login.xml" value="0.2" />
-        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/layout/activity_main.xml" value="0.18" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/layout/activity_pinactivity.xml" value="0.4" />
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/layout/activity_register.xml" value="0.22" />
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/layout/activity_reset_password.xml" value="0.23125" />

@@ -1,5 +1,6 @@
 package com.puresoftware.quickmemo;
 
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -9,10 +10,15 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,6 +31,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.puresoftware.quickmemo.room.AppDatabase;
 import com.puresoftware.quickmemo.room.Memo;
 import com.puresoftware.quickmemo.room.MemoDao;
+
+import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -41,12 +49,17 @@ public class MainActivity extends Activity {
     LinearLayout linTopcard1;
     LinearLayout linTopcard2;
 
+    LinearLayout linActivityBar;
+    LinearLayout linActivitySearchBar;
+    EditText edtContentSearch;
+
     DrawerLayout menuNavi;
     View drawerView;
     ImageView btnMenu;
     FloatingActionButton fbtnWrite;
     ImageView btnSearch;
     ImageView vEmpty;
+    AppBarLayout appBarLayout;
 
     TextView tvDrawerTitle;
     TextView tvDrawerEmail;
@@ -77,10 +90,16 @@ public class MainActivity extends Activity {
         tvMainCardCount = findViewById(R.id.tv_main_card_count);
         vEmpty = findViewById(R.id.v_main_empty);
 
+        // 일반 모드와 검색 모드를 위한 것.
+        linActivityBar = findViewById(R.id.lay_main_activity_bar);
+        linActivitySearchBar = findViewById(R.id.lay_main_activity_searchbar);
+        edtContentSearch = findViewById(R.id.edt_main_activity_search);
+
         // DrawerLayout 내 오브젝트
         tvDrawerTitle = drawerView.findViewById(R.id.tv_main_drawer_custom_ID);
         tvDrawerEmail = drawerView.findViewById(R.id.tv_main_drawer_custom_Email);
         btnDrawerSettings = drawerView.findViewById(R.id.btn_main_drawer_custom_settings);
+
 
         // RoomDB 메모내용 불러오기
         AppDatabase db = AppDatabase.getInstance(this);
@@ -274,26 +293,34 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
 
-                // appbar는 부모가 linear,col머시기는 부모가 frame
-//                FrameLayout appBarLayout = findViewById(R.id.appbar_layout);
-                CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collaspig_layout);
-//                Log.i("gugu", "colling:" +);
-//                Log.i("gugu", collapsingToolbarLayout.getHeight() + "");
+                // https://stackoverflow.com/questions/30655939/programmatically-collapse-or-expand-collapsingtoolbarlayout
+                appBarLayout = findViewById(R.id.appbar_layout);
+                appBarLayout.setExpanded(false); // 단 두줄만에 해결된 애니메이션까지.
 
-                AppBarLayout appBarLayout = findViewById(R.id.appbar_layout);
-//                collapsingToolbarLayout.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-//                    @Override
-//                    public void onLayoutChange(View view, int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
-//                        Log.i("gugu",i+","+i1+","+i2+","+i3+","+i4+","+i5+","+i6+","+i7);
-//                    }
-//                });
-//                Log.i("gugu", appBarLayout.getHeight() + "");
+                linActivityBar.setVisibility(View.GONE);
+                linActivitySearchBar.setVisibility(View.VISIBLE);
 
 
-                // 우선은 움직일때마다 변경될 값을 리스너로 받는다.
-                // 리스너 안에서 0dp로 주어져야 또는 -1로 처리하면 애니메이션이 처리될 것 같다.
+                edtContentSearch.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                        String text = String.valueOf(charSequence);
 
+//                        if (memos.lastIndexOf(text) != 1) {
+//                            Log.i("gugu", "okok");
+//                        }
 
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+                    }
+                });
             }
         });
 
@@ -329,13 +356,21 @@ public class MainActivity extends Activity {
 
     // 그 외 기능
     // 백 버튼을 누를 때, 드로우메뉴가 있으면 드로우메뉴 취소, 없으면 앱 끝내기.
+    // 드로우메뉴가 없을 때 검색창이 실행중이면 원래대로, 없으면 나가기.
     @Override
     public void onBackPressed() {
 
         if (menuNavi.isDrawerOpen(drawerView) == true) {
             menuNavi.closeDrawer(drawerView);
         } else {
-            super.onBackPressed(); // 종료 기능을 수행
+            if (linActivitySearchBar.getVisibility() == View.VISIBLE) {
+                linActivitySearchBar.setVisibility(View.GONE);
+                linActivityBar.setVisibility(View.VISIBLE);
+                appBarLayout.setExpanded(true);
+
+            } else {
+                super.onBackPressed(); // 종료 기능을 수행
+            }
         }
     }
 

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -188,6 +189,11 @@ class Adapter extends RecyclerView.Adapter<MainViewHolder> {
                 break;
         }
     }
+
+//    public void searchContent(MainViewHolder holder, ArrayList<Memo> datas, int position, String text) {
+//
+//
+//    }
 
 //    // MainActivy에서 MainActivity의 객체 가져오기.
 //    public void getMainActivity(Activity activity) {
