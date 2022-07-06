@@ -39,22 +39,12 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
     ImageView ivMainCard; // 백그라운드 이미지
     ImageView ivMainCardDelete; // 삭제모드 백그라운드 이미지
 
-//    ArrayList<Memo> datas = new ArrayList<>(); // adapter에서 받을 데이터 저장
-//    Memo memo; // MainViewHolder에 사용할 메모
-//    Context context; // lockContent에 쓸 context;
-//    Activity activity; // MainActivty에 finish()를 쓰기 위한 객체
-
-//    int switchs = 0;// delete 기능 선택,해제 스위치
-
     String TAG = MainViewHolder.class.getSimpleName();
+
+    Adapter.OnItemClickListener listener;
 
     public MainViewHolder(Context context, View itemView) {
         super(itemView);
-
-//        // MainViewHolder의 context를 lockContent에 전달하기 위한 멤버.
-//        if (this.context == null) {
-//            this.context = context;
-//        }
 
         tvTitleLeft = itemView.findViewById(R.id.tv_main_card_title_left);
         tvDateLeft = itemView.findViewById(R.id.tv_main_card_date_left);
@@ -62,29 +52,17 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
         ivMainCard = itemView.findViewById(R.id.iv_main_card);
         ivMainCardDelete = itemView.findViewById(R.id.iv_main_card_delete);
         viewMainCard = itemView.findViewById(R.id.view_main_card);
-
         tvContentLeft.setFocusable(false);
 
-//        // 일반 클릭
-//        viewMainCard.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                // 1st
-//                int positon = getAdapterPosition();
-//                memo = datas.get(positon);
-//                lockContentTop(memo, context, activity);
-//            }
-//        });
-
-//        // 롱 클릭
-//        viewMainCard.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View view) {
-//
-//                return true;
-//            }
-//        });
+        ivMainCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    listener.onItemClick(view, position);
+                }
+            }
+        });
     }
 
     public void lockContentTop(Memo memo, Context context, Activity activity) {
@@ -114,9 +92,24 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
 
 class Adapter extends RecyclerView.Adapter<MainViewHolder> {
 
-    //    ArrayList<Memo> datas = new ArrayList<>();
+    public String TAG = Adapter.class.getSimpleName();
+
+    // 데이터
     ArrayList<Memo> datas = new ArrayList<>();
-    Activity activity;
+
+    // 메소드를 호출하기 전까지는 null 상태;
+
+    // onclick가 끝이 나면 이 인터페이스를 통해 리턴받는다?
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+    }
+
+    public OnItemClickListener onItemClickListener = null;
+
+    // 액티비티에서 호출시킬 리사이클러뷰
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.onItemClickListener = listener;
+    }
 
     @NonNull
     @Override
@@ -126,19 +119,21 @@ class Adapter extends RecyclerView.Adapter<MainViewHolder> {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.main_card_item, parent, false);
         MainViewHolder viewHolder = new MainViewHolder(context, view);
+
         return viewHolder;
     }
 
+
     @Override
     public void onBindViewHolder(@NonNull MainViewHolder holder, int position) {
-
-//        holder.datas = datas; // 홀더에게 전달해 줄 데이터들.
-//        holder.activity = activity;
 
         datas.get(position);
         Log.i("TAG", "position:" + position); // 반복문 체계로 돌아가는 메소드임이 확실함.
 
         holder.tvTitleLeft.setText(datas.get(position).title);
+
+        // 내만 이렇게 하는 듯.
+        holder.listener = onItemClickListener;
 
         if (datas.get(position).star == false && datas.get(position).lock == false) {
             holder.ivMainCard.setImageResource(R.drawable.home_memo_ex);
@@ -189,14 +184,4 @@ class Adapter extends RecyclerView.Adapter<MainViewHolder> {
                 break;
         }
     }
-
-//    public void searchContent(MainViewHolder holder, ArrayList<Memo> datas, int position, String text) {
-//
-//
-//    }
-
-//    // MainActivy에서 MainActivity의 객체 가져오기.
-//    public void getMainActivity(Activity activity) {
-//        this.activity = activity;
-//    }
 }

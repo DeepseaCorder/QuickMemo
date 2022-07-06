@@ -243,6 +243,7 @@ public class MainActivity extends Activity {
                 memo.lock = memos.get(i).lock;
                 memo.star = memos.get(i).star;
                 adapter.setArrayData(memo);
+
 //                adapter.getMainActivity(activity);
             }
 
@@ -285,7 +286,14 @@ public class MainActivity extends Activity {
             }
         });
 
-        // 메인 카드 관련 코드는 Adapter에 있음.
+        // 메인카드 클릭 리스너(데이터를 백 하기 위한 것인 듯)
+        // https://lesslate.github.io/android/%EC%95%88%EB%93%9C%EB%A1%9C%EC%9D%B4%EB%93%9C-%EB%A6%AC%EC%82%AC%EC%9D%B4%ED%81%B4%EB%9F%AC%EB%B7%B0-%ED%81%B4%EB%A6%AD/
+        // https://hzie-devlog.tistory.com/7
+        adapter.setOnItemClickListener(new Adapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+            }
+        });
 
         // 검색
         btnSearch.setOnClickListener(new View.OnClickListener() {
