@@ -1,5 +1,6 @@
 package com.puresoftware.quickmemo;
 
+import androidx.appcompat.widget.SearchView;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -50,8 +52,10 @@ public class MainActivity extends Activity {
     LinearLayout linTopcard2;
 
     LinearLayout linActivityBar;
-    LinearLayout linActivitySearchBar;
-    EditText edtContentSearch;
+    FrameLayout frActivitySearchBar;
+    //    EditText edtContentSearch;
+    SearchView edtContentSearch;
+    TextView tvSearchBarHintMessage;
 
     DrawerLayout menuNavi;
     View drawerView;
@@ -75,7 +79,7 @@ public class MainActivity extends Activity {
     Memo secondMemo;
     Memo memo;
     TextView tvMainCardCount;
-//    Activity activity = MainActivity.this; // ViewHolder에 전달할 액티비티
+    Activity activity = MainActivity.this; // ViewHolder에 전달할 액티비티
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,8 +96,9 @@ public class MainActivity extends Activity {
 
         // 일반 모드와 검색 모드를 위한 것.
         linActivityBar = findViewById(R.id.lay_main_activity_bar);
-        linActivitySearchBar = findViewById(R.id.lay_main_activity_searchbar);
+        frActivitySearchBar = findViewById(R.id.lay_main_activity_searchbar);
         edtContentSearch = findViewById(R.id.edt_main_activity_search);
+        tvSearchBarHintMessage = findViewById(R.id.tv_main_activity_search_hint_object);
 
         // DrawerLayout 내 오브젝트
         tvDrawerTitle = drawerView.findViewById(R.id.tv_main_drawer_custom_ID);
@@ -244,7 +249,7 @@ public class MainActivity extends Activity {
                 memo.star = memos.get(i).star;
                 adapter.setArrayData(memo);
 
-//                adapter.getMainActivity(activity);
+                adapter.getMainActivity(activity);
             }
 
 //            int size = memos.size();
@@ -286,14 +291,14 @@ public class MainActivity extends Activity {
             }
         });
 
-        // 메인카드 클릭 리스너(데이터를 백 하기 위한 것인 듯)
-        // https://lesslate.github.io/android/%EC%95%88%EB%93%9C%EB%A1%9C%EC%9D%B4%EB%93%9C-%EB%A6%AC%EC%82%AC%EC%9D%B4%ED%81%B4%EB%9F%AC%EB%B7%B0-%ED%81%B4%EB%A6%AD/
-        // https://hzie-devlog.tistory.com/7
-        adapter.setOnItemClickListener(new Adapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-            }
-        });
+//        // 메인카드 클릭 리스너(데이터를 백 하기 위한 것인 듯)
+//        // https://lesslate.github.io/android/%EC%95%88%EB%93%9C%EB%A1%9C%EC%9D%B4%EB%93%9C-%EB%A6%AC%EC%82%AC%EC%9D%B4%ED%81%B4%EB%9F%AC%EB%B7%B0-%ED%81%B4%EB%A6%AD/
+//        // https://hzie-devlog.tistory.com/7
+//        adapter.setOnItemClickListener(new Adapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(View view, int position) {
+//            }
+//        });
 
         // 검색
         btnSearch.setOnClickListener(new View.OnClickListener() {
@@ -305,30 +310,82 @@ public class MainActivity extends Activity {
                 appBarLayout = findViewById(R.id.appbar_layout);
                 appBarLayout.setExpanded(false); // 단 두줄만에 해결된 애니메이션까지.
 
+                // 검색창은 보이게, 메뉴창은 안보이게
                 linActivityBar.setVisibility(View.GONE);
-                linActivitySearchBar.setVisibility(View.VISIBLE);
+                frActivitySearchBar.setVisibility(View.VISIBLE);
 
+//                https://stackoverflow.com/questions/11710042/expand-and-give-focus-to-searchview-automatically
+                // 검색창을 자동으로 확장시켜주는 것.
+                edtContentSearch.requestFocus(0);
+                edtContentSearch.setIconified(false);
 
-                edtContentSearch.addTextChangedListener(new TextWatcher() {
+                // https://stackoverflow.com/a/51656872
+                // 서치창 아무데나 누르면 기능 실행. setIconified가 뭘까. 검색 모드를 홀드 아니면 확장관련인것 같다.
+                edtContentSearch.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                        String text = String.valueOf(charSequence);
-
-//                        if (memos.lastIndexOf(text) != 1) {
-//                            Log.i("gugu", "okok");
-//                        }
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable editable) {
+                    public void onClick(View view) {
+                        edtContentSearch.setIconified(false);
                     }
                 });
+
+                // 입력을 받을 때.
+                edtContentSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+
+                        if(newText.trim().equals("")){
+                            tvSearchBarHintMessage.setVisibility(View.VISIBLE);
+                        }else{
+                            tvSearchBarHintMessage.setVisibility(View.INVISIBLE);
+                        }
+
+                        return false;
+                    }
+                });
+
+                // 서치 중 내용이 없는 상태에서 x 버튼을 누르면 onBackPressed 메소드를 실행.
+                edtContentSearch.setOnCloseListener(new SearchView.OnCloseListener() {
+                    @Override
+                    public boolean onClose() {
+                        onBackPressed();
+                        return false;
+                    }
+                });
+
+//                edtContentSearch.addTextChangedListener(new TextWatcher() {
+//                    @Override
+//                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//                    }
+//
+//                    @Override
+//                    public void afterTextChanged(Editable editable) {
+//                        String text = String.valueOf(editable.toString());
+//
+//                        // 1.글자 하나를 입력한다.
+//                        // 2.글자하나를 배열에 넣는다
+//                        // 3.글자하나와 어댑터 내의 데이터들을 for int i에 돌린다
+//                        // 4. 그 사이에 일치한 데이터가 있으면 okdata 배열, 없으면 continue;
+//                        // 5. 최종적으로 끝이 나면 okData에 있는 애들만 뿌린다.
+//                        // 6. 그게 아니라면 배열 한개씩넣고 바로 뿌린다.
+//
+////                        if (memos.lastIndexOf(text) != 1) {
+////                            Log.i("gugu", "okok");
+////                        }
+//
+//                        Log.i("gugu", text);
+//                    }
+//                });
             }
         });
 
@@ -371,8 +428,8 @@ public class MainActivity extends Activity {
         if (menuNavi.isDrawerOpen(drawerView) == true) {
             menuNavi.closeDrawer(drawerView);
         } else {
-            if (linActivitySearchBar.getVisibility() == View.VISIBLE) {
-                linActivitySearchBar.setVisibility(View.GONE);
+            if (frActivitySearchBar.getVisibility() == View.VISIBLE) {
+                frActivitySearchBar.setVisibility(View.GONE);
                 linActivityBar.setVisibility(View.VISIBLE);
                 appBarLayout.setExpanded(true);
 

@@ -15,6 +15,7 @@
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/drawable/ic_write_activity_star_regular.xml" value="0.24144736842105263" />
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/drawable/ic_write_activity_star_selected.xml" value="0.24144736842105263" />
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/drawable/main_card.xml" value="0.24144736842105263" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/drawable/search_bar.xml" value="0.38229166666666664" />
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/drawable/write_activity_btn_menuline.xml" value="0.24144736842105263" />
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/drawable/write_activity_color_black.xml" value="0.24144736842105263" />
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/drawable/write_activity_color_blue.xml" value="0.24144736842105263" />
@@ -27,7 +28,7 @@
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/drawable/write_activity_edit_textline.xml" value="0.24144736842105263" />
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/drawable/write_activity_menu_popup.xml" value="0.24144736842105263" />
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/layout/activity_login.xml" value="0.2" />
-        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/layout/activity_main.xml" value="0.5" />
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/layout/activity_pinactivity.xml" value="0.4" />
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/layout/activity_register.xml" value="0.22" />
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/layout/activity_reset_password.xml" value="0.23125" />

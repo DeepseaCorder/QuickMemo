@@ -38,8 +38,10 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
     RichEditor tvContentLeft; // 내용
     ImageView ivMainCard; // 백그라운드 이미지
     ImageView ivMainCardDelete; // 삭제모드 백그라운드 이미지
-
     String TAG = MainViewHolder.class.getSimpleName();
+
+    Activity activity;
+    ArrayList<Memo> datas = new ArrayList<>();
 
     Adapter.OnItemClickListener listener;
 
@@ -60,6 +62,11 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
                     listener.onItemClick(view, position);
+                    Log.i(TAG, "position: " + position);
+
+                    lockContentTop(datas.get(position), context, activity);
+
+
                 }
             }
         });
@@ -98,6 +105,7 @@ class Adapter extends RecyclerView.Adapter<MainViewHolder> {
     ArrayList<Memo> datas = new ArrayList<>();
 
     // 메소드를 호출하기 전까지는 null 상태;
+    Activity activity;
 
     // onclick가 끝이 나면 이 인터페이스를 통해 리턴받는다?
     public interface OnItemClickListener {
@@ -126,6 +134,9 @@ class Adapter extends RecyclerView.Adapter<MainViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MainViewHolder holder, int position) {
+
+        holder.activity = activity;
+        holder.datas = datas;
 
         datas.get(position);
         Log.i("TAG", "position:" + position); // 반복문 체계로 돌아가는 메소드임이 확실함.
@@ -184,4 +195,11 @@ class Adapter extends RecyclerView.Adapter<MainViewHolder> {
                 break;
         }
     }
+
+    // 어댑터에서 EditActivity를 실행시킬 때 새 액티비티를 실행하고, 기존 액티비티를 삭제할 수 있는 액티비티 객체
+    public void getMainActivity(Activity activity) {
+        this.activity = activity;
+    }
 }
+
+
