@@ -43,7 +43,7 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
     Activity activity;
     ArrayList<Memo> datas = new ArrayList<>();
 
-    Adapter.OnItemClickListener listener;
+//    Adapter.OnItemClickListener listener;
 
     public MainViewHolder(Context context, View itemView) {
         super(itemView);
@@ -61,7 +61,7 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
             public void onClick(View view) {
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
-                    listener.onItemClick(view, position);
+//                    listener.onItemClick(view, position);
                     Log.i(TAG, "position: " + position);
 
                     lockContentTop(datas.get(position), context, activity);
@@ -108,16 +108,16 @@ class Adapter extends RecyclerView.Adapter<MainViewHolder> {
     Activity activity;
 
     // onclick가 끝이 나면 이 인터페이스를 통해 리턴받는다?
-    public interface OnItemClickListener {
-        void onItemClick(View view, int position);
-    }
-
-    public OnItemClickListener onItemClickListener = null;
-
-    // 액티비티에서 호출시킬 리사이클러뷰
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.onItemClickListener = listener;
-    }
+//    public interface OnItemClickListener {
+//        void onItemClick(View view, int position);
+//    }
+//
+//    public OnItemClickListener onItemClickListener = null;
+//
+//    // 액티비티에서 호출시킬 리사이클러뷰
+//    public void setOnItemClickListener(OnItemClickListener listener) {
+//        this.onItemClickListener = listener;
+//    }
 
     @NonNull
     @Override
@@ -144,7 +144,7 @@ class Adapter extends RecyclerView.Adapter<MainViewHolder> {
         holder.tvTitleLeft.setText(datas.get(position).title);
 
         // 내만 이렇게 하는 듯.
-        holder.listener = onItemClickListener;
+//        holder.listener = onItemClickListener;
 
         if (datas.get(position).star == false && datas.get(position).lock == false) {
             holder.ivMainCard.setImageResource(R.drawable.home_memo_ex);

@@ -35,7 +35,7 @@
         app:layout_constraintGuide_percent="0.26812428" />
 
     <TextView
-        android:id="@+id/tv_reset_user_activity_title"
+        android:id="@+id/tv_pin_set_activity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="#26000000"

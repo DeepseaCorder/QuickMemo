@@ -157,6 +157,15 @@ public class PINActivity extends AppCompatActivity {
 
             }
         });
+
+        resetUserInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(PINActivity.this,PINsetActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
     @Override

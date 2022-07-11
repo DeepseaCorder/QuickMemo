@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/lay_pin_activity_keyboard_use"
+    android:id="@+id/tvimg_pin_set_activity_keyboard_use"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="true"
@@ -37,10 +37,11 @@
         app:layout_constraintGuide_percent="0.44994247" />
 
     <TextView
+        android:id="@+id/tvimg_pin_set_activity_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="#26000000"
-        android:text="PIN을 입력해주세요"
+        android:text="핀 입력 메세지"
         android:textAlignment="center"
         android:textColor="#262626"
         android:textColorHint="#26000000"
@@ -77,7 +78,7 @@
 
 
             <TextView
-                android:id="@+id/tvimg_pin_activity_1_pin"
+                android:id="@+id/tvimg_pin_set_activity_1_pin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -88,7 +89,7 @@
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/tvimg_pin_activity_2_pin"
+                android:id="@+id/tvimg_pin_set_activity_2_pin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -98,7 +99,7 @@
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/tvimg_pin_activity_3_pin"
+                android:id="@+id/tvimg_pin_set_activity_3_pin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -108,7 +109,7 @@
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/tvimg_pin_activity_4_pin"
+                android:id="@+id/tvimg_pin_set_activity_4_pin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -119,7 +120,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/tv_pin_activity_message"
+            android:id="@+id/tvimg_pin_set_activity_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="PIN이 일치하지 않습니다."
@@ -130,7 +131,6 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/laybtn_pin_activity_reset_user_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -146,6 +146,7 @@
             android:text="PIN을 잊어버리셨나요?"
             android:textAlignment="center"
             android:textColor="#262626"
+            android:visibility="invisible"
             android:textStyle="bold" />
 
         <TextView
@@ -153,10 +154,11 @@
             android:layout_height="wrap_content"
             android:text="PIN 재설정"
             android:textAlignment="center"
+            android:visibility="invisible"
             android:textColor="#FF6868" />
 
         <EditText
-            android:id="@+id/edt_pin_activity_input_number"
+            android:id="@+id/edt_pin_set_activity_input_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@null"
