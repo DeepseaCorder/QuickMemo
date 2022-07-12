@@ -47,6 +47,8 @@ public class AppSettingsActivity extends PreferenceActivity {
             case "download":
                 break;
 
+            case "pin mode":
+                intentGo(PINsetActivity.class);
         }
         return false;
     }

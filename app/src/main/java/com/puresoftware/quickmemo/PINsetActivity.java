@@ -32,8 +32,7 @@ public class PINsetActivity extends AppCompatActivity {
     String pin = "";
     String beforePin = "";
 
-    int a = 1;
-    String data = "0000";
+    String data = "";
 
     String TAG = PINsetActivity.class.getSimpleName();
 
@@ -46,6 +45,7 @@ public class PINsetActivity extends AppCompatActivity {
         // PIN 모드와 PIN 데이터
         SharedPreferences sharedPreferences = getSharedPreferences("user_info",MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
+        data = sharedPreferences.getString("PIN","");
 
         pinLayout = findViewById(R.id.tvimg_pin_set_activity_keyboard_use);
         pin1 = findViewById(R.id.tvimg_pin_set_activity_1_pin);
@@ -70,7 +70,7 @@ public class PINsetActivity extends AppCompatActivity {
         });
 
         // 0은 초기설정 모드
-        if (a == 0) {
+        if (data.equals("no")) {
             tvTitle.setText("원하는 PIN을 입력해주세요");
             edtKeyboard.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -136,6 +136,9 @@ public class PINsetActivity extends AppCompatActivity {
                         } else {
                             if (beforePin.equals(pin)) {
                                 tvMessage.setVisibility(View.INVISIBLE);
+                                editor.putString("PIN",beforePin);
+                                editor.commit();
+                                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0); // 키보드 자동 내림
                                 Toast.makeText(PINsetActivity.this, "모두 일치합니다", Toast.LENGTH_SHORT).show();
                                 finish();
 
@@ -248,9 +251,13 @@ public class PINsetActivity extends AppCompatActivity {
                             } else {
                                 if (beforePin.equals(pin)) {
                                     tvMessage.setVisibility(View.INVISIBLE);
-                                    Toast.makeText(PINsetActivity.this, "모두 일치합니다", Toast.LENGTH_SHORT).show();
+                                    editor.putString("PIN",beforePin);
+                                    editor.commit();
+                                    imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0); // 키보드 자동 내림
+                                    Toast.makeText(PINsetActivity.this, "변경되었습니다.", Toast.LENGTH_SHORT).show();
                                     finish();
 
+                                    Log.i(TAG,"beforePIN:"+beforePin+",pin:"+pin);
                                 } else {
                                     tvMessage.setVisibility(View.VISIBLE);
                                     pin = "";

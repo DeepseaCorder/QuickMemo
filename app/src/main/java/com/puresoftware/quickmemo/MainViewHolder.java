@@ -42,6 +42,8 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
 
     Activity activity;
     ArrayList<Memo> datas = new ArrayList<>();
+    MainViewHolder selectHolder; // 선택될 홀더들. 이렇게 해서 뽑아야 아이템을 얻을 수 있다.
+    boolean deleteMode = false;
 
 //    Adapter.OnItemClickListener listener;
 
@@ -65,11 +67,53 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
                     Log.i(TAG, "position: " + position);
 
                     lockContentTop(datas.get(position), context, activity);
-
-
                 }
             }
         });
+
+//        ivMainCard.setOnLongClickListener(new View.OnLongClickListener() {
+//            @Override
+//            public boolean onLongClick(View view) {
+//
+//                if(deleteMode == false){
+//                    deleteMode = true;
+//                    Log.i(TAG,"삭제모드");
+//
+//                }else if(deleteMode == true){
+//                    deleteMode = false;
+//                    Log.i(TAG,"일반모드");
+//                }
+//                return false;
+//            }
+//        });
+//
+//        if(deleteMode == false){
+//            ivMainCard.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    int position = getAdapterPosition();
+//                    if (position != RecyclerView.NO_POSITION) {
+////                    listener.onItemClick(view, position);
+//                        Log.i(TAG, "position: " + position);
+//
+////                        lockContentTop(datas.get(position), context, activity);
+//                    }
+//                }
+//            });
+//
+//        }else{
+//            ivMainCard.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    int position = getAdapterPosition();
+//                    if (position != RecyclerView.NO_POSITION) {
+//
+//                        selectHolder.ivMainCard.setImageResource(R.drawable.delete);
+//                        Log.i(TAG, "position: " + position);
+//                    }
+//                }
+//            });
+//        }
     }
 
     public void lockContentTop(Memo memo, Context context, Activity activity) {
@@ -131,12 +175,12 @@ class Adapter extends RecyclerView.Adapter<MainViewHolder> {
         return viewHolder;
     }
 
-
     @Override
     public void onBindViewHolder(@NonNull MainViewHolder holder, int position) {
 
         holder.activity = activity;
         holder.datas = datas;
+        holder.selectHolder = holder;
 
         datas.get(position);
         Log.i("TAG", "position:" + position); // 반복문 체계로 돌아가는 메소드임이 확실함.

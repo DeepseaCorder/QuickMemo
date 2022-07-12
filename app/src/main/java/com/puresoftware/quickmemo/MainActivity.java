@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -105,11 +106,22 @@ public class MainActivity extends Activity {
         tvDrawerEmail = drawerView.findViewById(R.id.tv_main_drawer_custom_Email);
         btnDrawerSettings = drawerView.findViewById(R.id.btn_main_drawer_custom_settings);
 
+        // 앱을 처음 실행 할 때 가장 기본적인 데이터들(가입정보, 암호설정)
+        SharedPreferences preferences = getSharedPreferences("user_info",MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        String appStarter = preferences.getString("starter","yes"); // 이 앱을 깔고 처음 시작했을 때 확인 여부
+        String PIN = preferences.getString("PIN","no"); // 초기 비밀번호 설정
+        Log.i(TAG,"Appstarter:"+appStarter+",PIN:"+PIN);
+
+        if(appStarter.equals("yes")){
+            editor.putString("starter","no");
+            editor.putString("PIN",PIN);
+            editor.commit();
+        }
 
         // RoomDB 메모내용 불러오기
         AppDatabase db = AppDatabase.getInstance(this);
         MemoDao memoDao = db.dao();
-
 
         new Thread(new Runnable() {
             @Override
@@ -248,7 +260,6 @@ public class MainActivity extends Activity {
                 memo.lock = memos.get(i).lock;
                 memo.star = memos.get(i).star;
                 adapter.setArrayData(memo);
-
                 adapter.getMainActivity(activity);
             }
 
