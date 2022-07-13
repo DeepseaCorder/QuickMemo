@@ -25,10 +25,10 @@ import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import jp.wasabeef.richeditor.RichEditor;
-
 
 public class MainViewHolder extends RecyclerView.ViewHolder {
 
@@ -40,12 +40,11 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
     ImageView ivMainCardDelete; // 삭제모드 백그라운드 이미지
     String TAG = MainViewHolder.class.getSimpleName();
 
-    Activity activity;
     ArrayList<Memo> datas = new ArrayList<>();
     MainViewHolder selectHolder; // 선택될 홀더들. 이렇게 해서 뽑아야 아이템을 얻을 수 있다.
-    boolean deleteMode = false;
 
-//    Adapter.OnItemClickListener listener;
+    Adapter.OnItemClickListener listener;
+    Adapter.OnItemLongClickListener longListener;
 
     public MainViewHolder(Context context, View itemView) {
         super(itemView);
@@ -58,86 +57,31 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
         viewMainCard = itemView.findViewById(R.id.view_main_card);
         tvContentLeft.setFocusable(false);
 
+        // click 구현부, 데이터들은 애초에 Main에서 처리.
         ivMainCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
-//                    listener.onItemClick(view, position);
-                    Log.i(TAG, "position: " + position);
-
-                    lockContentTop(datas.get(position), context, activity);
+                    if (listener != null) {
+                        listener.onItemClick(view, position);
+                    }
                 }
             }
         });
 
-//        ivMainCard.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View view) {
-//
-//                if(deleteMode == false){
-//                    deleteMode = true;
-//                    Log.i(TAG,"삭제모드");
-//
-//                }else if(deleteMode == true){
-//                    deleteMode = false;
-//                    Log.i(TAG,"일반모드");
-//                }
-//                return false;
-//            }
-//        });
-//
-//        if(deleteMode == false){
-//            ivMainCard.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    int position = getAdapterPosition();
-//                    if (position != RecyclerView.NO_POSITION) {
-////                    listener.onItemClick(view, position);
-//                        Log.i(TAG, "position: " + position);
-//
-////                        lockContentTop(datas.get(position), context, activity);
-//                    }
-//                }
-//            });
-//
-//        }else{
-//            ivMainCard.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    int position = getAdapterPosition();
-//                    if (position != RecyclerView.NO_POSITION) {
-//
-//                        selectHolder.ivMainCard.setImageResource(R.drawable.delete);
-//                        Log.i(TAG, "position: " + position);
-//                    }
-//                }
-//            });
-//        }
-    }
-
-    public void lockContentTop(Memo memo, Context context, Activity activity) {
-
-        // 인텐트 데이터를 모아놓기
-        Intent intent = new Intent();
-        intent.putExtra("title", memo.title);
-        intent.putExtra("content", memo.content);
-        intent.putExtra("timestamp", memo.timestamp);
-        intent.putExtra("lock", memo.star);
-        intent.putExtra("star", memo.lock);
-
-        // 락 모드가 true면 PIN을 입력하는 곳으로 가기.
-        if (memo.lock == true) {
-            intent.setClass(context, PINActivity.class);
-            context.startActivity(intent);
-            activity.finish(); // mainActivity
-
-            // 락 모드가 false면 바로 수정창으로 가기.
-        } else {
-            intent.setClass(context, EditActivity.class);
-            context.startActivity(intent);
-            activity.finish(); // mainActivity
-        }
+        ivMainCard.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    if (longListener != null) {
+                        longListener.onItemLongClick(view, position);
+                    }
+                }
+                return false;
+            }
+        });
     }
 }
 
@@ -148,20 +92,31 @@ class Adapter extends RecyclerView.Adapter<MainViewHolder> {
     // 데이터
     ArrayList<Memo> datas = new ArrayList<>();
 
-    // 메소드를 호출하기 전까지는 null 상태;
-    Activity activity;
+    // onClick 인터페이스
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+    }
 
-    // onclick가 끝이 나면 이 인터페이스를 통해 리턴받는다?
-//    public interface OnItemClickListener {
-//        void onItemClick(View view, int position);
-//    }
-//
-//    public OnItemClickListener onItemClickListener = null;
-//
-//    // 액티비티에서 호출시킬 리사이클러뷰
-//    public void setOnItemClickListener(OnItemClickListener listener) {
-//        this.onItemClickListener = listener;
-//    }
+    // 리스너 객체, Holder에 전달해야 함.
+    private OnItemClickListener onItemClickListener = null;
+
+    // 액티비티에서 호출시킬 리사이클러뷰
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.onItemClickListener = listener;
+    }
+
+    // onLongClick 인터페이스
+    public interface OnItemLongClickListener {
+        void onItemLongClick(View view, int position);
+    }
+
+    // 리스너 객체, Holder에 전달해야 함.
+    private OnItemLongClickListener onItemLongClickListener = null;
+
+    // 액티비티에서 호출시킬 리사이클러뷰
+    public void setOnItemLongClickListener(OnItemLongClickListener listener) {
+        this.onItemLongClickListener = listener;
+    }
 
     @NonNull
     @Override
@@ -178,17 +133,14 @@ class Adapter extends RecyclerView.Adapter<MainViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull MainViewHolder holder, int position) {
 
-        holder.activity = activity;
         holder.datas = datas;
         holder.selectHolder = holder;
+        holder.listener = onItemClickListener; // 내만 이렇게 하는 듯.
+        holder.longListener = onItemLongClickListener; // 내만 이렇게 하는 듯.
+
 
         datas.get(position);
-        Log.i("TAG", "position:" + position); // 반복문 체계로 돌아가는 메소드임이 확실함.
-
         holder.tvTitleLeft.setText(datas.get(position).title);
-
-        // 내만 이렇게 하는 듯.
-//        holder.listener = onItemClickListener;
 
         if (datas.get(position).star == false && datas.get(position).lock == false) {
             holder.ivMainCard.setImageResource(R.drawable.home_memo_ex);
@@ -218,7 +170,7 @@ class Adapter extends RecyclerView.Adapter<MainViewHolder> {
         datas.add(memo);
     }
 
-    // 잠금 컨텐츠에 대한 표시여부,
+    //잠금 컨텐츠에 대한 표시여부,
     public void lockContent(int lock, MainViewHolder holder, ArrayList<Memo> datas, int position) {
 
         switch (lock) {
@@ -238,11 +190,6 @@ class Adapter extends RecyclerView.Adapter<MainViewHolder> {
                 holder.tvDateLeft.setText(sdf2.format(datas.get(position).timestamp));
                 break;
         }
-    }
-
-    // 어댑터에서 EditActivity를 실행시킬 때 새 액티비티를 실행하고, 기존 액티비티를 삭제할 수 있는 액티비티 객체
-    public void getMainActivity(Activity activity) {
-        this.activity = activity;
     }
 }
 

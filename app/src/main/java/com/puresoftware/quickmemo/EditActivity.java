@@ -131,7 +131,6 @@ public class EditActivity extends AppCompatActivity {
 
                 if (afterTitle.trim().isEmpty() && afterContent.trim().isEmpty()) {
                     Intent intent = new Intent(EditActivity.this, MainActivity.class);
-                    startActivity(intent);
                     finish();
 
                     Log.i(TAG, "memo null");

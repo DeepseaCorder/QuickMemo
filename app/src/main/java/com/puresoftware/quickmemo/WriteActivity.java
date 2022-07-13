@@ -111,7 +111,6 @@ public class WriteActivity extends AppCompatActivity {
                 // 외부라이브러리에서 TextNull은 TextUtils.isEmpty로 해야 함.
                 if (title.trim().equals("") && TextUtils.isEmpty(content)) {
                     Intent intent = new Intent(WriteActivity.this, MainActivity.class);
-                    startActivity(intent);
                     finish();
 
                     Log.i(TAG, "memo null");
