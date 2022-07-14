@@ -49,48 +49,56 @@ import jp.wasabeef.richeditor.RichEditor;
 
 public class MainActivity extends Activity {
 
+
+    // top
     LinearLayout linTopcard1;
     LinearLayout linTopcard2;
+    View firstView;
+    View secondView;
 
+    // serch
     FrameLayout frActivitySearchBar;
     SearchView edtContentSearch;
     TextView tvSearchBarHintMessage;
 
+    // select
     LinearLayout linSelbar;
     TextView tvSelCount;
     ImageView imgbtnTrash;
     ImageView imgbtnFunc;
     MainViewHolder holder;
 
-
+    // main
     LinearLayout linActivityBar;
-    DrawerLayout menuNavi;
-    View drawerView;
     ImageView btnMenu;
     FloatingActionButton fbtnWrite;
     ImageView btnSearch;
     ImageView vEmpty;
     AppBarLayout appBarLayout;
-    RecyclerView recyclerView;
-    Adapter adapter;
 
+    // drawer
+    DrawerLayout menuNavi;
+    View drawerView;
     TextView tvDrawerTitle;
     TextView tvDrawerEmail;
     ImageView btnDrawerSettings;
 
-    String TAG = MainActivity.class.getSimpleName();
+    // recycler
+    RecyclerView recyclerView;
+    Adapter adapter;
 
-    View firstView;
-    View secondView;
-
+    // adapter
     List<Memo> memos;
     Memo lastMemo;
     Memo secondMemo;
     Memo memo;
     TextView tvMainCardCount;
 
+    // select mode
     boolean selectMode = false;
     ArrayList<String> set = new ArrayList<>(); // 받을 때는 String, 뺄 때는 int
+
+    String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,6 +138,7 @@ public class MainActivity extends Activity {
         String PIN = preferences.getString("PIN", "no"); // 초기 비밀번호 설정
         Log.i(TAG, "Appstarter:" + appStarter + ",PIN:" + PIN);
 
+        // 앱 스타터가 yes면 처음 실행한 것, 그 다음에 바로 no로 바꾸고, pin은 없다.
         if (appStarter.equals("yes")) {
             editor.putString("starter", "no");
             editor.putString("PIN", PIN);
@@ -341,11 +350,32 @@ public class MainActivity extends Activity {
                         set.remove(String.valueOf(position));
                         holder.ivMainCardDelete.setVisibility(View.GONE);
                     }
+                    tvSelCount.setText(set.size() + "개 선택됨");
+
                     Log.i(TAG, "size:" + set.size() + '\n');
 
                     for (Object object : set) {
                         Log.i(TAG, object + "아이템");
                     }
+
+                    // 입력모드 2개인 폴더 이동과 삭제.
+                    imgbtnTrash.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            // set은 선택된 메모들의 포지션
+                            // memos는 전체 메모들
+
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    for (int i = 0; i < set.size(); i++) {
+                                        Memo deleteMemo = memos.get(Integer.parseInt(set.get(i))); // 선택된 메모의 포지션 가져오기.
+                                        memoDao.delete(deleteMemo);
+                                    }
+                                }
+                            }).start();
+                        }
+                    });
                 }
             }
         });
@@ -470,11 +500,11 @@ public class MainActivity extends Activity {
                 appBarLayout.setExpanded(true);
                 selectMode = false;
 
-//                for (int i = 0; i < set.size(); i++) {
-////                    holder = recyclerView.findViewHolderForAdapterPosition()
-////                    holder.ivMainCardDelete.setVisibility(View.GONE);
-////                    adapter.onBindViewHolder(holder, i);
-//                }
+                // 이 반복문과 이 구조를 잊지 말것. 위치값을 받아오는 연습이 필요. , 뒤로 누르면 select된 이미지 모두 제거.
+                for (int i = 0; i < set.size(); i++) {
+                    holder.ivMainCardDelete.setVisibility(View.GONE);
+                    holder = (MainViewHolder) recyclerView.findViewHolderForAdapterPosition(Integer.parseInt(set.get(i)));
+                }
 
             } else {
                 super.onBackPressed(); // 종료 기능을 수행

@@ -91,6 +91,7 @@ class Adapter extends RecyclerView.Adapter<MainViewHolder> {
 
     // 데이터
     ArrayList<Memo> datas = new ArrayList<>();
+    MainViewHolder holder;
 
     // onClick 인터페이스
     public interface OnItemClickListener {
@@ -137,7 +138,6 @@ class Adapter extends RecyclerView.Adapter<MainViewHolder> {
         holder.selectHolder = holder;
         holder.listener = onItemClickListener; // 내만 이렇게 하는 듯.
         holder.longListener = onItemLongClickListener; // 내만 이렇게 하는 듯.
-
 
         datas.get(position);
         holder.tvTitleLeft.setText(datas.get(position).title);
