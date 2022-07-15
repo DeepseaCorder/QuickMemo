@@ -98,6 +98,26 @@ public class MainActivity extends Activity {
     boolean selectMode = false;
     ArrayList<String> set = new ArrayList<>(); // 받을 때는 String, 뺄 때는 int
 
+    // 대공사
+
+    // first view
+    TextView tvTopCardTitle;
+    RichEditor tvTopCardContent;
+    TextView tvTopCardDate;
+    TextView tvTopCardLock;
+
+    // secondview
+    TextView tvImportantCardTitle;
+    TextView tvImportantCardDate;
+    TextView tvImportantCardLock;
+    RichEditor tvImportantCardContent;
+
+    // Threads
+    Thread memoDaoThread;
+    Thread topCardThread;
+    Thread deleteThread;
+
+
     String TAG = MainActivity.class.getSimpleName();
 
     @Override
@@ -149,9 +169,10 @@ public class MainActivity extends Activity {
         AppDatabase db = AppDatabase.getInstance(this);
         MemoDao memoDao = db.dao();
 
-        new Thread(new Runnable() {
+        memoDaoThread = new Thread(new Runnable() {
             @Override
             public void run() {
+                memos = new ArrayList<>(); // unSupportedle머시기exception으로 인해 추가.
                 memos = memoDao.getAll();
 
                 // 배포할 때에는 이 코드 끄기.
@@ -159,7 +180,20 @@ public class MainActivity extends Activity {
                     Log.i(TAG, "memoDatas:" + memo.toString());
                 }
             }
-        }).start();
+        });
+        memoDaoThread.start();
+
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                memos = memoDao.getAll();
+//
+//                // 배포할 때에는 이 코드 끄기.
+//                for (Memo memo : memos) {
+//                    Log.i(TAG, "memoDatas:" + memo.toString());
+//                }
+//            }
+//        }).start();
 
         // Top 카드 메뉴
         if (linTopcard1 == null || linTopcard2 == null) {
@@ -171,7 +205,7 @@ public class MainActivity extends Activity {
             secondView = inflater.inflate(R.layout.main_top_card_item_important, linTopcard2, true);
         }
 
-        new Thread(new Runnable() {
+        topCardThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 // 메모 불러오기
@@ -193,10 +227,10 @@ public class MainActivity extends Activity {
                 Log.i("lock", "lock" + lastMemo.lock);
 
                 // firstView
-                TextView tvTopCardTitle = firstView.findViewById(R.id.tv_main_last_card_title);
-                TextView tvTopCardDate = firstView.findViewById(R.id.tv_main_last_card_date);
-                TextView tvTopCardLock = firstView.findViewById(R.id.tv_main_top_card_last_lock);
-                RichEditor tvTopCardContent = firstView.findViewById(R.id.tv_main_last_card_content);
+                tvTopCardTitle = firstView.findViewById(R.id.tv_main_last_card_title);
+                tvTopCardDate = firstView.findViewById(R.id.tv_main_last_card_date);
+                tvTopCardLock = firstView.findViewById(R.id.tv_main_top_card_last_lock);
+                tvTopCardContent = firstView.findViewById(R.id.tv_main_last_card_content);
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd a H:mm", Locale.KOREA);
 
                 if (lastMemo.lock == true) {
@@ -215,10 +249,10 @@ public class MainActivity extends Activity {
                 tvTopCardContent.setInputEnabled(false);
 
                 // secondView
-                TextView tvImportantCardTitle = secondView.findViewById(R.id.tv_main_impo_card_title);
-                TextView tvImportantCardDate = secondView.findViewById(R.id.tv_main_impo_card_date);
-                TextView tvImportantCardLock = secondView.findViewById(R.id.tv_main_top_card_impor_lock);
-                RichEditor tvImportantCardContent = secondView.findViewById(R.id.tv_main_impo_card_content);
+                tvImportantCardTitle = secondView.findViewById(R.id.tv_main_impo_card_title);
+                tvImportantCardDate = secondView.findViewById(R.id.tv_main_impo_card_date);
+                tvImportantCardLock = secondView.findViewById(R.id.tv_main_top_card_impor_lock);
+                tvImportantCardContent = secondView.findViewById(R.id.tv_main_impo_card_content);
                 tvImportantCardContent.setInputEnabled(false);
 
 
@@ -261,7 +295,100 @@ public class MainActivity extends Activity {
                     linTopcard2.setVisibility(View.GONE); // 메모 비전시
                 }
             }
-        }).start();
+        });
+        topCardThread.start();
+
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                // 메모 불러오기
+//
+//                // data
+//                long recentStamp = 0;
+//                long imporRecentStamp = 0;
+//                //향상된 for문
+//
+//                if (memos.size() <= 0) {
+//                    linTopcard1.setVisibility(View.GONE);
+//                    linTopcard2.setVisibility(View.GONE);
+//
+//                    return;
+//                }
+//                lastMemo = memos.get(memos.size() - 1);
+//                recentStamp = lastMemo.timestamp;
+//
+//                Log.i("lock", "lock" + lastMemo.lock);
+//
+//                // firstView
+//                tvTopCardTitle = firstView.findViewById(R.id.tv_main_last_card_title);
+//                tvTopCardDate = firstView.findViewById(R.id.tv_main_last_card_date);
+//                tvTopCardLock = firstView.findViewById(R.id.tv_main_top_card_last_lock);
+//                tvTopCardContent = firstView.findViewById(R.id.tv_main_last_card_content);
+//                SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd a H:mm", Locale.KOREA);
+//
+//                if (lastMemo.lock == true) {
+//                    tvTopCardTitle.setText(lastMemo.title);
+//                    tvTopCardContent.setHtml("");
+//                    tvTopCardDate.setText(sdf.format(lastMemo.timestamp));
+//                    tvTopCardLock.setVisibility(View.VISIBLE);
+//
+//                } else {
+//                    tvTopCardTitle.setText(lastMemo.title);
+//                    tvTopCardContent.setHtml(lastMemo.content);
+//                    tvTopCardDate.setText(sdf.format(lastMemo.timestamp));
+//                    tvTopCardLock.setVisibility(View.GONE);
+//                }
+//
+//                tvTopCardContent.setInputEnabled(false);
+//
+//                // secondView
+//                tvImportantCardTitle = secondView.findViewById(R.id.tv_main_impo_card_title);
+//                tvImportantCardDate = secondView.findViewById(R.id.tv_main_impo_card_date);
+//                tvImportantCardLock = secondView.findViewById(R.id.tv_main_top_card_impor_lock);
+//                tvImportantCardContent = secondView.findViewById(R.id.tv_main_impo_card_content);
+//                tvImportantCardContent.setInputEnabled(false);
+//
+//
+//                List<Memo> starList = new ArrayList<>();
+////
+////                // 초보자용 코드
+////                for(int i = 0; i<memos.size(); i++) {
+////                    Memo memo = memos.get(i);
+////
+////                    if (memo.star == true) {
+////                        starList.add(memo);
+////                    }
+////                }
+//
+//                // 리스트에서 필터링 할 때 사용
+//                // 실무 (Java8, 람다, steam, filter)
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//                    starList = memos.stream().filter(memo -> memo.star == true).collect(Collectors.toList());
+//                }
+//
+//                if (starList.size() > 0) { // 데이터가 1개 이상이면 메모 전시, 없으면 메모 삭제.
+//
+//                    secondMemo = starList.get(starList.size() - 1);
+//
+//                    if (secondMemo.lock == true) {
+//                        tvImportantCardLock.setVisibility(View.VISIBLE);
+//                        tvImportantCardTitle.setText(secondMemo.title);
+//                        tvImportantCardDate.setText(sdf.format(secondMemo.timestamp));
+//                        tvImportantCardLock.setVisibility(View.VISIBLE);
+//
+//                    } else {
+//                        tvImportantCardTitle.setText(secondMemo.title);
+//                        tvImportantCardDate.setText(sdf.format(secondMemo.timestamp));
+//                        tvImportantCardContent.setHtml(secondMemo.content);
+//                        tvImportantCardLock.setVisibility(View.GONE);
+//                    }
+//                    linTopcard2.setVisibility(View.VISIBLE); // 메모 전시
+//
+//                } else {
+//                    linTopcard2.setVisibility(View.GONE); // 메모 비전시
+//                }
+//            }
+//        }).start();
 
         // 카드 메뉴
         recyclerView = findViewById(R.id.rec_main_card);
@@ -332,10 +459,10 @@ public class MainActivity extends Activity {
         adapter.setOnItemClickListener(new Adapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Memo memo = adapter.datas.get(position);
+                Memo clickmemo = adapter.datas.get(position);
 
                 if (selectMode == false) {
-                    lockContentTop(memo);
+                    lockContentTop(clickmemo);
 
                 } else {
 
@@ -365,7 +492,7 @@ public class MainActivity extends Activity {
                             // set은 선택된 메모들의 포지션
                             // memos는 전체 메모들
 
-                            new Thread(new Runnable() {
+                            deleteThread = new Thread(new Runnable() {
                                 @Override
                                 public void run() {
                                     for (int i = 0; i < set.size(); i++) {
@@ -373,7 +500,37 @@ public class MainActivity extends Activity {
                                         memoDao.delete(deleteMemo);
                                     }
                                 }
-                            }).start();
+                            });
+                            deleteThread.start();
+
+                            // 두번 호출을 하면 안된다. 그래서 중단시키고 해야한다.
+                            memoDaoThread.interrupt();
+                            memoDaoThread.start();
+                            topCardThread.stop();
+                            topCardThread.start();
+
+                            adapter = new Adapter();
+
+                            if (memos.size() > 0) {
+                                tvMainCardCount.setText(memos.size() + "개의 메모");
+                                vEmpty.setVisibility(View.GONE); // 비어 있음 이미지 끄기
+
+                                for (int i = 0; i < memos.size(); i++) {
+
+                                    memo = new Memo();
+                                    memo.title = memos.get(i).title;
+                                    memo.content = memos.get(i).content;
+                                    memo.timestamp = memos.get(i).timestamp;
+                                    memo.lock = memos.get(i).lock;
+                                    memo.star = memos.get(i).star;
+                                    adapter.setArrayData(memo);
+                                }
+
+                            } else {
+                                vEmpty.setVisibility(View.VISIBLE); // 비어있음 이미지 켜기
+                            }
+
+                            recyclerView.setAdapter(adapter);
                         }
                     });
                 }
