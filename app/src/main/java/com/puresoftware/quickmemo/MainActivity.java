@@ -419,6 +419,7 @@ public class MainActivity extends Activity {
 
 
         recyclerView.setAdapter(adapter);
+        adapter.filterStart(memos);
 
         // 최근 카드 (last)
         linTopcard1.setOnClickListener(new View.OnClickListener() {
@@ -566,6 +567,7 @@ public class MainActivity extends Activity {
                 // 검색창을 자동으로 확장시켜주는 것.
                 edtContentSearch.requestFocus(0);
                 edtContentSearch.setIconified(false);
+                adapter.getFilter().filter(""); // 실행하자말자 필터링 초기값을 받아야 함.
 
                 // https://stackoverflow.com/a/51656872
                 // 서치창 아무데나 누르면 기능 실행. setIconified가 뭘까. 검색 모드를 홀드 아니면 확장관련인것 같다.
@@ -573,6 +575,7 @@ public class MainActivity extends Activity {
                     @Override
                     public void onClick(View view) {
                         edtContentSearch.setIconified(false);
+                        adapter.getFilter().filter(""); // 실행하자말자 필터링 초기값을 받아야 함.
                     }
                 });
 
@@ -591,6 +594,7 @@ public class MainActivity extends Activity {
                         } else {
                             tvSearchBarHintMessage.setVisibility(View.INVISIBLE);
                         }
+                        adapter.getFilter().filter(newText); // 초기값을 위해서라도 받아야 함.
 
                         return false;
                     }

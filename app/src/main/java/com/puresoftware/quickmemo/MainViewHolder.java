@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,6 +27,8 @@ import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -85,13 +89,149 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
     }
 }
 
-class Adapter extends RecyclerView.Adapter<MainViewHolder> {
+class Adapter extends RecyclerView.Adapter<MainViewHolder> implements Filterable {
 
     public String TAG = Adapter.class.getSimpleName();
 
     // 데이터
-    ArrayList<Memo> datas = new ArrayList<>();
+    ArrayList<Memo> datas = new ArrayList<>(); // sel
+    ArrayList<Memo> datasAll; // all
+    ArrayList<Memo> filtered = new ArrayList<>(); // 필터링 된 데이터
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd a H:mm", Locale.KOREA); // 날짜 받아오기 위한 것.
+
     MainViewHolder holder;
+
+    // search 호출 메소드
+    @Override
+    public Filter getFilter() {
+        Log.i(TAG, "지금 getFilter 실행");
+        return exampleFilter;
+    }
+
+    // https://itmansa.tistory.com/6
+    // 따로 몇가지 수정했는데 이게 제일 맞음.
+    // 학습 필요. 필터 메소드
+    private Filter exampleFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            filtered = new ArrayList<>();
+
+            Log.i(TAG, "text:" + charSequence);
+
+            if (charSequence == null || charSequence.length() == 0) {
+                filtered.addAll(datasAll); // 객체를 다 집어넣는다.
+
+                Log.i(TAG, "charSeq null 해제");
+                Log.i(TAG, "datas size:" + datas.size());
+                Log.i(TAG, "");
+
+            } else {
+                String filterPattern = charSequence.toString().trim();
+
+                Log.i(TAG, "String FilterPattern 결과 :" + filterPattern);
+                Log.i(TAG, "");
+
+                for (Memo memo : datasAll) {
+                    // filter 대상
+
+                    if (memo.getTitle().contains(filterPattern) ||
+                            sdf.format(memo.getTimestamp()).contains(filterPattern)) { // 시간이나
+                        filtered.add(memo);
+
+//                        holder.tvContentLeft.setHtml(datas.get(position).content);
+//                        holder.tvContentLeft.setInputEnabled(false);
+//                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd a H:mm", Locale.KOREA);
+//                        holder.tvDateLeft.setText(sdf.format(datas.get(position).timestamp));
+//                        sdf = null;
+
+                        Log.i(TAG, "memo.getTitle():" + memo.getTitle());
+                        Log.i(TAG, "memo.getTime()" + String.valueOf(new Date(memo.getTimestamp())));
+                        Log.i(TAG, "");
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = filtered;
+
+            Log.i(TAG, "result.values();;:" + results.values);
+            Log.i(TAG, "filtered.size:" + filtered.size());
+            Log.i(TAG, "");
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            datas.clear();
+            datas.addAll((ArrayList) filterResults.values);
+
+            Log.i("gugu", "-필터 명령어 종료-");
+            notifyDataSetChanged();
+
+        }
+    };
+
+    // back up code
+//    // search 호출 메소드
+//    @Override
+//    public Filter getFilter() {
+//        Log.i("gugu", "지금 getFilter 실행");
+//        return exampleFilter;
+//    }
+//
+//    // https://itmansa.tistory.com/6
+//    // 따로 몇가지 수정했는데 이게 제일 맞음.
+//    // 학습 필요. 필터 메소드
+//    private Filter exampleFilter = new Filter() {
+//        @Override
+//        protected FilterResults performFiltering(CharSequence charSequence) {
+//            filtered = new ArrayList<>();
+//
+//            Log.i("gugu", "ㅅㄷㅌㅅ:" + charSequence);
+//
+//            if (charSequence == null || charSequence.length() == 0) {
+//                filtered.addAll(datasAll); // 객체를 다 집어넣는다.
+//
+//                Log.i("gugu", "charSeq null 해제");
+//                Log.i("gugu", "datas size:" + datas.size());
+//                Log.i("gugu", "");
+//
+//            } else {
+//                String filterPattern = charSequence.toString().trim();
+//
+//                Log.i("gugu", "String FilterPattern 결과 :" + filterPattern);
+//                Log.i("gugu", "");
+//
+//                for (Memo memo : datasAll) {
+//                    // filter 대상
+//                    if (memo.getTitle().contains(filterPattern)) { // to lower 그딴거 빼라
+//                        filtered.add(memo);
+//
+//                        Log.i("gugu", "memo.getTitle():" + memo.getTitle());
+//                        Log.i("gugu", "filteredSize:" + memo.getTitle().length());
+//                        Log.i("gugu", "");
+//                    }
+//                }
+//            }
+//            FilterResults results = new FilterResults();
+//            results.values = filtered;
+//
+//            Log.i("gugu", "result.values();;:" + results.values);
+//            Log.i("gugu", "filtered.size:" + filtered.size());
+//            Log.i("gugu", "");
+//            return results;
+//        }
+//
+//        @Override
+//        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+//            datas.clear();
+//            datas.addAll((ArrayList) filterResults.values);
+//
+//            Log.i("gugu", "-필터 명령어 종료-");
+//            notifyDataSetChanged();
+//
+//        }
+//    };
+
 
     // onClick 인터페이스
     public interface OnItemClickListener {
@@ -168,6 +308,10 @@ class Adapter extends RecyclerView.Adapter<MainViewHolder> {
     // MainActivity에서 데이터 가져오기
     public void setArrayData(Memo memo) {
         datas.add(memo);
+    }
+
+    public void filterStart(List<Memo> memos) {
+        datasAll = (ArrayList<Memo>) memos;
     }
 
     //잠금 컨텐츠에 대한 표시여부,
