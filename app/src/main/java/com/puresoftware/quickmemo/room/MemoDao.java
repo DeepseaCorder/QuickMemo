@@ -36,6 +36,9 @@ public interface MemoDao {
     @Query("SELECT * FROM Memo")
     List<Memo> getAll();
 
+    @Query("SELECT * FROM Memo where trash=:isTrash")
+    List<Memo> getNotTrashAll(boolean isTrash);
+
     @Insert
     void insert(Memo memo);
 
@@ -49,4 +52,6 @@ public interface MemoDao {
     @Query("UPDATE Memo set title=:title,content=:content,star=:star,lock=:lock where timestamp=:timeStamp")
     void updateData(String title, String content, boolean star, boolean lock, long timeStamp);
 
+    @Query("UPDATE Memo set trash=:isTransh where uid=:uid")
+    void updateTrash(boolean isTransh, int uid);
 }

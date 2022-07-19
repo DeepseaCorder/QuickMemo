@@ -25,6 +25,12 @@ public class Memo {
     @ColumnInfo(name = "timestamp")
     public long timestamp;
 
+    @ColumnInfo(name = "trash")
+    public boolean isTrash;
+
+    @ColumnInfo(name = "folder")
+    public String folder;
+
     public int getUid() {
         return uid;
     }
@@ -73,6 +79,22 @@ public class Memo {
         this.timestamp = timestamp;
     }
 
+    public boolean isTrash() {
+        return isTrash;
+    }
+
+    public void setTrash(boolean trash) {
+        isTrash = trash;
+    }
+
+    public String getFolder() {
+        return folder;
+    }
+
+    public void setFolder(String folder) {
+        this.folder = folder;
+    }
+
     @Override
     public String toString() {
         return "Memo{" +
@@ -82,6 +104,8 @@ public class Memo {
                 ", star=" + star +
                 ", lock=" + lock +
                 ", timestamp=" + timestamp +
+                ", isTrash=" + isTrash +
+                ", folder='" + folder + '\'' +
                 '}';
     }
 }

@@ -135,7 +135,8 @@ class Adapter extends RecyclerView.Adapter<MainViewHolder> implements Filterable
                     // filter 대상
 
                     if (memo.getTitle().contains(filterPattern) ||
-                            sdf.format(memo.getTimestamp()).contains(filterPattern)) { // 시간이나
+                            sdf.format(memo.getTimestamp()).contains(filterPattern)
+                            || memo.getContent().contains(filterPattern)) { // 시간이나
                         filtered.add(memo);
 
 //                        holder.tvContentLeft.setHtml(datas.get(position).content);

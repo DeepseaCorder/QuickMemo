@@ -1,5 +1,6 @@
 package com.puresoftware.quickmemo;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.SearchView;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -25,6 +26,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -83,6 +85,18 @@ public class MainActivity extends Activity {
     TextView tvDrawerEmail;
     ImageView btnDrawerSettings;
 
+    // drawer-item
+    LinearLayout linDrawerMain;
+    ImageView imgDrawerMain;
+    TextView tvDrawerMain;
+    LinearLayout linDrawerImpo;
+    ImageView imgDrawerImpo;
+    TextView tvDrawerImpo;
+    LinearLayout linDrawerTrash;
+    ImageView imgDrawerTrash;
+    TextView tvDrawerTrash;
+    ListView lvDrawerItem;
+
     // recycler
     RecyclerView recyclerView;
     Adapter adapter;
@@ -120,6 +134,7 @@ public class MainActivity extends Activity {
 
     String TAG = MainActivity.class.getSimpleName();
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -151,6 +166,19 @@ public class MainActivity extends Activity {
         tvDrawerEmail = drawerView.findViewById(R.id.tv_main_drawer_custom_Email);
         btnDrawerSettings = drawerView.findViewById(R.id.btn_main_drawer_custom_settings);
 
+        // DrawerLayout 내 아이템 오브젝트
+        linDrawerMain = findViewById(R.id.lin_main_drawer_main_folder);
+        imgDrawerMain = findViewById(R.id.iv_main_drawer_main_folder);
+        tvDrawerMain = findViewById(R.id.iv_main_drawer_main_count);
+        linDrawerImpo = findViewById(R.id.lin_main_drawer_impo_folder);
+        imgDrawerImpo = findViewById(R.id.iv_main_drawer_impo_folder);
+        tvDrawerImpo = findViewById(R.id.iv_main_drawer_impo_count);
+        linDrawerTrash = findViewById(R.id.lin_main_drawer_trash_folder);
+        imgDrawerTrash = findViewById(R.id.iv_main_drawer_trash_folder);
+        tvDrawerTrash = findViewById(R.id.iv_main_drawer_trash_count);
+        lvDrawerItem = findViewById(R.id.lv_main_activity_drawer_list_item);
+
+
         // 앱을 처음 실행 할 때 가장 기본적인 데이터들(가입정보, 암호설정)
         SharedPreferences preferences = getSharedPreferences("user_info", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
@@ -173,7 +201,8 @@ public class MainActivity extends Activity {
             @Override
             public void run() {
                 memos = new ArrayList<>(); // unSupportedle머시기exception으로 인해 추가.
-                memos = memoDao.getAll();
+//                memos = memoDao.getAll();
+                memos = memoDao.getNotTrashAll(false);
 
                 // 배포할 때에는 이 코드 끄기.
                 for (Memo memo : memos) {
@@ -399,6 +428,12 @@ public class MainActivity extends Activity {
         adapter = new Adapter();
 
         if (memos.size() > 0) {
+            //            list.stream().filter(t->t.length()>5)
+
+            // true이면 휴지통간것임. 그래서 false인 메모만 보여야함
+//            List<Memo> realMemos = memos.stream().filter(m->m.isTrash()==false).collect(Collectors.toList());
+
+
             tvMainCardCount.setText(memos.size() + "개의 메모");
             vEmpty.setVisibility(View.GONE); // 비어 있음 이미지 끄기
 
@@ -410,7 +445,9 @@ public class MainActivity extends Activity {
                 memo.timestamp = memos.get(i).timestamp;
                 memo.lock = memos.get(i).lock;
                 memo.star = memos.get(i).star;
+
                 adapter.setArrayData(memo);
+
             }
 
         } else {
@@ -493,45 +530,158 @@ public class MainActivity extends Activity {
                             // set은 선택된 메모들의 포지션
                             // memos는 전체 메모들
 
+
+                            // 2022/07/19 - run 메소드내부 가독성좋게 리팩토링
                             deleteThread = new Thread(new Runnable() {
                                 @Override
                                 public void run() {
+
+                                    // 1) 삭제할 메모의 인덱스 탐색
                                     for (int i = 0; i < set.size(); i++) {
                                         Memo deleteMemo = memos.get(Integer.parseInt(set.get(i))); // 선택된 메모의 포지션 가져오기.
-                                        memoDao.delete(deleteMemo);
+
+
+                                        // 2) 휴지통으로 이동하는 로직
+                                        memoDao.updateTrash(true, deleteMemo.getUid());
                                     }
+                                    Log.i("gugu", "삭제완료");
+
+
+                                    // 3) memoDaoThread start하기
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            memos = memoDao.getNotTrashAll(false);
+
+                                            // 배포할 때에는 이 코드 끄기.
+                                            for (Memo memo : memos) {
+                                                Log.i(TAG, "memoDatas:" + memo.toString());
+                                            }
+                                        }
+                                    }).start();
+
+                                    // 4) topCardThread start하기
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            // data
+                                            long recentStamp = 0;
+                                            long imporRecentStamp = 0;
+                                            //향상된 for문
+
+                                            if (memos.size() <= 0) {
+                                                linTopcard1.setVisibility(View.GONE);
+                                                linTopcard2.setVisibility(View.GONE);
+
+                                                return;
+                                            }
+                                            lastMemo = memos.get(memos.size() - 1);
+                                            recentStamp = lastMemo.timestamp;
+
+                                            Log.i("lock", "lock" + lastMemo.lock);
+
+                                            // firstView
+                                            tvTopCardTitle = firstView.findViewById(R.id.tv_main_last_card_title);
+                                            tvTopCardDate = firstView.findViewById(R.id.tv_main_last_card_date);
+                                            tvTopCardLock = firstView.findViewById(R.id.tv_main_top_card_last_lock);
+                                            tvTopCardContent = firstView.findViewById(R.id.tv_main_last_card_content);
+                                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd a H:mm", Locale.KOREA);
+
+                                            if (lastMemo.lock == true) {
+                                                tvTopCardTitle.setText(lastMemo.title);
+                                                tvTopCardContent.setHtml("");
+                                                tvTopCardDate.setText(sdf.format(lastMemo.timestamp));
+                                                tvTopCardLock.setVisibility(View.VISIBLE);
+
+                                            } else {
+                                                tvTopCardTitle.setText(lastMemo.title);
+                                                tvTopCardContent.setHtml(lastMemo.content);
+                                                tvTopCardDate.setText(sdf.format(lastMemo.timestamp));
+                                                tvTopCardLock.setVisibility(View.GONE);
+                                            }
+
+                                            tvTopCardContent.setInputEnabled(false);
+
+                                            // secondView
+                                            tvImportantCardTitle = secondView.findViewById(R.id.tv_main_impo_card_title);
+                                            tvImportantCardDate = secondView.findViewById(R.id.tv_main_impo_card_date);
+                                            tvImportantCardLock = secondView.findViewById(R.id.tv_main_top_card_impor_lock);
+                                            tvImportantCardContent = secondView.findViewById(R.id.tv_main_impo_card_content);
+                                            tvImportantCardContent.setInputEnabled(false);
+
+
+                                            List<Memo> starList = new ArrayList<>();
+//
+//                // 초보자용 코드
+//                for(int i = 0; i<memos.size(); i++) {
+//                    Memo memo = memos.get(i);
+//
+//                    if (memo.star == true) {
+//                        starList.add(memo);
+//                    }
+//                }
+
+                                            // 리스트에서 필터링 할 때 사용
+                                            // 실무 (Java8, 람다, steam, filter)
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                                starList = memos.stream().filter(memo -> memo.star == true).collect(Collectors.toList());
+                                            }
+
+                                            if (starList.size() > 0) { // 데이터가 1개 이상이면 메모 전시, 없으면 메모 삭제.
+
+                                                secondMemo = starList.get(starList.size() - 1);
+
+                                                if (secondMemo.lock == true) {
+                                                    tvImportantCardLock.setVisibility(View.VISIBLE);
+                                                    tvImportantCardTitle.setText(secondMemo.title);
+                                                    tvImportantCardDate.setText(sdf.format(secondMemo.timestamp));
+                                                    tvImportantCardLock.setVisibility(View.VISIBLE);
+
+                                                } else {
+                                                    tvImportantCardTitle.setText(secondMemo.title);
+                                                    tvImportantCardDate.setText(sdf.format(secondMemo.timestamp));
+                                                    tvImportantCardContent.setHtml(secondMemo.content);
+                                                    tvImportantCardLock.setVisibility(View.GONE);
+                                                }
+                                                linTopcard2.setVisibility(View.VISIBLE); // 메모 전시
+
+                                            } else {
+                                                linTopcard2.setVisibility(View.GONE); // 메모 비전시
+                                            }
+                                        }
+                                    });
+
+                                    // 5) adapter 갱신
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            adapter = new Adapter();
+
+                                            if (memos.size() > 0) {
+                                                tvMainCardCount.setText(memos.size() + "개의 메모");
+                                                vEmpty.setVisibility(View.GONE); // 비어 있음 이미지 끄기
+
+                                                for (int i = 0; i < memos.size(); i++) {
+
+                                                    memo = new Memo();
+                                                    memo.title = memos.get(i).title;
+                                                    memo.content = memos.get(i).content;
+                                                    memo.timestamp = memos.get(i).timestamp;
+                                                    memo.lock = memos.get(i).lock;
+                                                    memo.star = memos.get(i).star;
+                                                    adapter.setArrayData(memo);
+                                                }
+
+                                            } else {
+                                                vEmpty.setVisibility(View.VISIBLE); // 비어있음 이미지 켜기
+                                            }
+
+                                            recyclerView.setAdapter(adapter);
+                                        }
+                                    });
                                 }
                             });
                             deleteThread.start();
-
-                            // 두번 호출을 하면 안된다. 그래서 중단시키고 해야한다.
-                            memoDaoThread.interrupt();
-                            memoDaoThread.start();
-                            topCardThread.stop();
-                            topCardThread.start();
-
-                            adapter = new Adapter();
-
-                            if (memos.size() > 0) {
-                                tvMainCardCount.setText(memos.size() + "개의 메모");
-                                vEmpty.setVisibility(View.GONE); // 비어 있음 이미지 끄기
-
-                                for (int i = 0; i < memos.size(); i++) {
-
-                                    memo = new Memo();
-                                    memo.title = memos.get(i).title;
-                                    memo.content = memos.get(i).content;
-                                    memo.timestamp = memos.get(i).timestamp;
-                                    memo.lock = memos.get(i).lock;
-                                    memo.star = memos.get(i).star;
-                                    adapter.setArrayData(memo);
-                                }
-
-                            } else {
-                                vEmpty.setVisibility(View.VISIBLE); // 비어있음 이미지 켜기
-                            }
-
-                            recyclerView.setAdapter(adapter);
                         }
                     });
                 }
@@ -616,6 +766,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 menuNavi.openDrawer(drawerView);
+
 
                 // 설정 버튼
                 btnDrawerSettings.setOnClickListener(new View.OnClickListener() {
