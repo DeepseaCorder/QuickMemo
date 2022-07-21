@@ -6,16 +6,15 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="start"
-    android:layout_marginTop="10dp"
-    android:layout_marginBottom="10dp"
-    android:background="@color/white"
+    android:layout_marginTop="20dp"
+    android:layout_marginBottom="20dp"
+    android:background="@drawable/drawer_shape"
     android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/linearLayout10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/linear_corner"
         android:orientation="vertical">
 
         <LinearLayout
@@ -39,9 +38,9 @@
 
                     <TextView
                         android:id="@+id/tv_main_drawer_custom_ID"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="150dp"
+                        android:layout_marginRight="0dp"
                         android:text="ASDF1234 님"
                         android:textColor="#DE000000"
                         android:textSize="20sp"
@@ -66,6 +65,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
+                        android:layout_marginRight="2dp"
                         android:layout_marginBottom="5dp"
                         android:background="@drawable/ic_settings_solid" />
 
@@ -81,109 +81,128 @@
                 <LinearLayout
                     android:id="@+id/lin_main_drawer_main_folder"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_height="42dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/round_retengle"
+                    android:orientation="horizontal"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp">
 
                     <ImageView
                         android:id="@+id/iv_main_drawer_main_folder"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/ic_outline_home_24" />
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/drawer_main" />
 
                     <TextView
                         android:id="@+id/iv_main_drawer_main_title"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="6"
                         android:layout_gravity="center_vertical"
-                        android:text="메인"
-                        android:textColor="#DE000000" />
+                        android:text="          메인"
+                        android:textColor="#DE000000"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/iv_main_drawer_main_count"
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.5"
-                        android:layout_gravity="center|center_horizontal"
+                        android:layout_marginRight="10dp"
                         android:text="0"
-                        android:gravity="right"
-                        android:textColor="#DE000000" />
+                        android:textAlignment="textEnd"
+                        android:textColor="#DE000000"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/lin_main_drawer_impo_folder"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="42dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/round_retengle_impo"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp">
 
                     <ImageView
                         android:id="@+id/iv_main_drawer_impo_folder"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0"
-                        app:srcCompat="@drawable/ic_outline_home_24" />
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/drawer_impo" />
 
                     <TextView
                         android:id="@+id/iv_main_drawer_impo_title"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_weight="0"
-                        android:text="중요"
+                        android:text="          중요"
                         android:textColor="#DE000000"
-                        tools:layout_weight="1" />
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/iv_main_drawer_impo_count"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center|center_horizontal"
-                        android:layout_weight="0"
+                        android:layout_marginRight="10dp"
                         android:text="0"
-                        android:textColor="#DE000000" />
+                        android:textAlignment="textEnd"
+                        android:textColor="#DE000000"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/lin_main_drawer_trash_folder"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="42dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/round_retengle_trash"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp">
 
                     <ImageView
                         android:id="@+id/iv_main_drawer_trash_folder"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0"
-                        app:srcCompat="@drawable/ic_outline_home_24" />
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/drawer_trash" />
 
                     <TextView
                         android:id="@+id/iv_main_drawer_trash_title"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_weight="0"
-                        android:text="휴지통"
+                        android:text="          휴지통"
                         android:textColor="#DE000000"
-                        tools:layout_weight="1" />
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/iv_main_drawer_trash_count"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center|center_horizontal"
-                        android:layout_weight="0"
+                        android:layout_marginRight="10dp"
                         android:text="0"
-                        android:textColor="#DE000000" />
+                        android:textAlignment="textEnd"
+                        android:textColor="#DE000000"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
 
             </LinearLayout>
 
-            <ListView
-                android:id="@+id/lv_main_activity_drawer_list_item"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
 
             <ImageView
                 android:id="@+id/imageView15"
@@ -193,22 +212,28 @@
                 android:layout_marginBottom="5dp"
                 android:background="@drawable/write_activity_btn_menuline" />
 
-            <!-- srcCompat, src, background -->
-            <ListView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
+                <ListView
+                    android:id="@+id/lv_main_activity_drawer_list_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="30dp"
+                    android:background="@drawable/folder_add" />
+
+
+            </LinearLayout>
 
         </LinearLayout>
-
-        <!--        <LinearLayout-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="match_parent"-->
-        <!--            android:orientation="horizontal" />-->
-
     </LinearLayout>
-
-
 </LinearLayout>
 
 
