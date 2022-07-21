@@ -17,6 +17,7 @@
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/drawable/ic_write_activity_star_regular.xml" value="0.24144736842105263" />
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/drawable/ic_write_activity_star_selected.xml" value="0.24144736842105263" />
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/drawable/linear_corner.xml" value="0.38229166666666664" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/drawable/main_activity_drawer_menuline.xml" value="0.26979166666666665" />
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/drawable/main_card.xml" value="0.24144736842105263" />
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/drawable/search_bar.xml" value="0.38229166666666664" />
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/drawable/write_activity_btn_menuline.xml" value="0.24144736842105263" />
@@ -41,10 +42,10 @@
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/layout/activity_sample_acivity.xml" value="0.3567708333333333" />
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/layout/activity_splash.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/layout/activity_web_test.xml" value="0.22" />
-        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/layout/activity_write.xml" value="0.25" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/layout/activity_write.xml" value="0.264" />
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/layout/layout_widget.xml" value="0.72" />
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/layout/main_card_item.xml" value="0.4" />
-        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/layout/main_drawer_custom.xml" value="0.264" />
+        <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/layout/main_drawer_custom.xml" value="0.2" />
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/layout/main_drawer_select_set_item.xml" value="0.264" />
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/layout/main_menu_header.xml" value="0.22" />
         <entry key="..\:/Users/WorkStation/AndroidStudioProjects/github_projects/QuickMemo/app/src/main/res/layout/main_top_card_item.xml" value="0.25" />

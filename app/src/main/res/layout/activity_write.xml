@@ -11,7 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
+        android:layout_marginBottom="2dp"
         android:orientation="horizontal">
 
         <ImageView
@@ -66,10 +68,20 @@
 
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/imageView15"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/write_activity_btn_menuline" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
         android:layout_marginBottom="10dp">
 
 
@@ -81,8 +93,7 @@
             android:layout_weight="1"
             android:text="크기"
             android:textAlignment="center"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textSize="20sp" />
 
         <ImageView
             android:id="@+id/btn_write_activity_color"
@@ -125,6 +136,23 @@
             android:translationY="2dp"
             app:srcCompat="@drawable/ic_underline_solid" />
 
+        <ImageView
+            android:id="@+id/btn__write_activity_box"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:translationY="2dp"
+            app:srcCompat="@drawable/ic_write_activity_box" />
+
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageView16"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/write_activity_btn_menuline"
+        android:visibility="invisible" />
 
 </LinearLayout>

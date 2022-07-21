@@ -210,7 +210,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
-                android:background="@drawable/write_activity_btn_menuline" />
+                android:background="@drawable/main_activity_drawer_menuline" />
 
             <LinearLayout
                 android:layout_width="match_parent"
