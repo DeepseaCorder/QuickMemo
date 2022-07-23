@@ -6,6 +6,7 @@
     android:layout_height="wrap_content">
 
     <LinearLayout
+        android:id="@+id/lin_main_drawer_user_folder"
         android:layout_width="match_parent"
         android:layout_height="42dp"
         android:layout_marginTop="5dp"
@@ -16,7 +17,6 @@
         android:paddingBottom="10dp">
 
         <ImageView
-            android:id="@+id/iv_main_drawer_select_folder"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
@@ -25,7 +25,7 @@
             android:background="@drawable/drawer_folder" />
 
         <TextView
-            android:id="@+id/iv_main_drawer_select_title"
+            android:id="@+id/tv_main_drawer_user_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -35,7 +35,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/iv_main_drawer_select_count"
+            android:id="@+id/tv_main_drawer_user_count"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/view_main_card"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
@@ -9,49 +11,45 @@
         android:id="@+id/iv_main_card"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/home_memo_ex"></ImageView>
+        android:src="@drawable/home_memo_ex"
+        android:visibility="visible"></ImageView>
 
     <LinearLayout
-        android:layout_width="188dp"
-        android:layout_height="180dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="12dp"
-        android:layout_marginBottom="15dp"
+        android:id="@+id/linearLayout12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+        <TextView
+            android:id="@+id/tv_main_card_date_left"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="2020.11.1 5AM 10Min"
+            android:textAlignment="viewStart"
+            android:textColor="#FF7373"
+            android:textSize="12sp" />
 
-            <TextView
-                android:id="@+id/tv_main_card_date_left"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="2020.11.1 5AM 10Min"
-                android:textColor="#FF7373"
-                android:textSize="12sp" />
+        <TextView
+            android:id="@+id/tv_main_card_title_left"
+            android:layout_width="match_parent"
+            android:layout_height="28dp"
+            android:text="가馬娘あㅁAs@.'!*8가"
+            android:textAlignment="viewStart"
+            android:textColor="#000000"
+            android:textSize="20sp" />
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/tv_main_card_title_left"
-                android:layout_width="match_parent"
-                android:layout_height="28dp"
-                android:text="가馬娘あㅁAs@.'!*8가"
-                android:textColor="#000000"
-                android:textSize="20sp" />
-        </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <jp.wasabeef.richeditor.RichEditor
-                android:id="@+id/tv_main_card_content"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp" />
-        </LinearLayout>
+        <jp.wasabeef.richeditor.RichEditor
+            android:id="@+id/tv_main_card_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <!-- delete icon -->

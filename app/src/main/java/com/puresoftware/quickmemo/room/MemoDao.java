@@ -54,4 +54,12 @@ public interface MemoDao {
 
     @Query("UPDATE Memo set trash=:isTransh where uid=:uid")
     void updateTrash(boolean isTransh, int uid);
+
+    @Insert
+    void insertFolder(UserFolder userFolder);
+
+    @Query("SELECT * FROM UserFolder")
+    List<UserFolder> getFolderAll();
+
+
 }

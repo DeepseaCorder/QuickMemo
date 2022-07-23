@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.puresoftware.quickmemo.artifacts.HomeDO;
@@ -60,6 +61,7 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
         ivMainCardDelete = itemView.findViewById(R.id.iv_main_card_delete);
         viewMainCard = itemView.findViewById(R.id.view_main_card);
         tvContentLeft.setFocusable(false);
+
 
         // click 구현부, 데이터들은 애초에 Main에서 처리.
         ivMainCard.setOnClickListener(new View.OnClickListener() {

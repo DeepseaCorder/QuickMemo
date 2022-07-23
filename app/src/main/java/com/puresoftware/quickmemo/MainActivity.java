@@ -33,9 +33,11 @@ import android.widget.Toast;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.puresoftware.quickmemo.drawer.UserFolderAdapter;
 import com.puresoftware.quickmemo.room.AppDatabase;
 import com.puresoftware.quickmemo.room.Memo;
 import com.puresoftware.quickmemo.room.MemoDao;
+import com.puresoftware.quickmemo.room.UserFolder;
 
 import org.w3c.dom.Text;
 
@@ -89,13 +91,17 @@ public class MainActivity extends Activity {
     LinearLayout linDrawerMain;
     ImageView imgDrawerMain;
     TextView tvDrawerMain;
+
     LinearLayout linDrawerImpo;
     ImageView imgDrawerImpo;
     TextView tvDrawerImpo;
+
     LinearLayout linDrawerTrash;
     ImageView imgDrawerTrash;
     TextView tvDrawerTrash;
+
     ListView lvDrawerItem;
+    ImageView ivDrawerAddFolder;
 
     // recycler
     RecyclerView recyclerView;
@@ -103,6 +109,8 @@ public class MainActivity extends Activity {
 
     // adapter
     List<Memo> memos;
+    List<Memo> starList;
+    List<UserFolder> folders;
     Memo lastMemo;
     Memo secondMemo;
     Memo memo;
@@ -177,6 +185,7 @@ public class MainActivity extends Activity {
         imgDrawerTrash = findViewById(R.id.iv_main_drawer_trash_folder);
         tvDrawerTrash = findViewById(R.id.iv_main_drawer_trash_count);
         lvDrawerItem = findViewById(R.id.lv_main_activity_drawer_list_item);
+        ivDrawerAddFolder = findViewById(R.id.iv_main_drawer_add_folder);
 
 
         // 앱을 처음 실행 할 때 가장 기본적인 데이터들(가입정보, 암호설정)
@@ -208,6 +217,12 @@ public class MainActivity extends Activity {
                 for (Memo memo : memos) {
                     Log.i(TAG, "memoDatas:" + memo.toString());
                 }
+
+                folders = memoDao.getFolderAll();
+                for (com.puresoftware.quickmemo.room.UserFolder folder : folders) {
+                    Log.i(TAG, "folderDatas:" + folder.toString());
+                }
+
             }
         });
         memoDaoThread.start();
@@ -285,7 +300,7 @@ public class MainActivity extends Activity {
                 tvImportantCardContent.setInputEnabled(false);
 
 
-                List<Memo> starList = new ArrayList<>();
+                starList = new ArrayList<>();
 //
 //                // 초보자용 코드
 //                for(int i = 0; i<memos.size(); i++) {
@@ -776,6 +791,76 @@ public class MainActivity extends Activity {
                         startActivity(intent);
                     }
                 });
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        if (starList == null || memos == null) {
+                            return;
+                        }
+
+                        tvDrawerTrash.setText(memoDao.getNotTrashAll(true).size() + "");
+                        if (starList.size() > 0) {
+                            tvDrawerImpo.setText(starList.size() + "");
+                        }
+                        if (memos.size() > 0) {
+                            tvDrawerMain.setText(memos.size() + "");
+                        }
+                    }
+                }).start();
+
+                linDrawerMain.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Log.i("gugu", "메인");
+                    }
+                });
+
+                linDrawerImpo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Log.i("gugu", "중요");
+                    }
+                });
+
+                linDrawerTrash.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Log.i("gugu", "휴지통");
+                    }
+                });
+
+                UserFolderAdapter userFolderAdapter = new UserFolderAdapter();
+
+                lvDrawerItem.setAdapter(userFolderAdapter);
+                for (UserFolder folder : folders) {
+                    userFolderAdapter.addItem(folder);
+                }
+
+                ivDrawerAddFolder.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Log.i("gugu", "폴더 추가");
+
+                        com.puresoftware.quickmemo.room.UserFolder folder = new UserFolder();
+                        folder.setTitle("             " + "새 폴더");
+                        folder.setTimestamp(System.currentTimeMillis());
+                        folder.setCount(0);
+                        userFolderAdapter.addItem(folder);
+                        userFolderAdapter.notifyDataSetChanged(); // 실시간으로 어댑터를 업데이트하라는 노티피케이션
+
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                memoDao.insertFolder(folder);
+
+                            }
+                        }).start();
+
+                    }
+                });
+
             }
         });
 

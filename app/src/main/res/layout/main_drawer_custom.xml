@@ -94,6 +94,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="10dp"
+                        android:layout_marginBottom="2dp"
                         android:background="@drawable/drawer_main" />
 
                     <TextView
@@ -101,7 +102,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:text="          메인"
+                        android:text="          전체"
                         android:textColor="#DE000000"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -220,13 +221,16 @@
                 <ListView
                     android:id="@+id/lv_main_activity_drawer_list_item"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/iv_main_drawer_add_folder"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
                     android:background="@drawable/folder_add" />
 
 
