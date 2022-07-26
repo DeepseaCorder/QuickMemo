@@ -58,6 +58,12 @@ public interface MemoDao {
     @Insert
     void insertFolder(UserFolder userFolder);
 
+    @Query("UPDATE UserFolder set title=:title where uid=:uid")
+    void updateFolder(String title, int uid);
+
+    @Delete
+    void deleteFolder(UserFolder userFolder);
+
     @Query("SELECT * FROM UserFolder")
     List<UserFolder> getFolderAll();
 

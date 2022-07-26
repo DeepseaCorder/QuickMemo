@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -111,6 +113,8 @@ public class MainActivity extends Activity {
     List<Memo> memos;
     List<Memo> starList;
     List<UserFolder> folders;
+    UserFolder folder;
+    UserFolderAdapter userFolderAdapter;
     Memo lastMemo;
     Memo secondMemo;
     Memo memo;
@@ -222,7 +226,6 @@ public class MainActivity extends Activity {
                 for (com.puresoftware.quickmemo.room.UserFolder folder : folders) {
                     Log.i(TAG, "folderDatas:" + folder.toString());
                 }
-
             }
         });
         memoDaoThread.start();
@@ -810,6 +813,14 @@ public class MainActivity extends Activity {
                     }
                 }).start();
 
+                // 드로우어블 뒤의 모든게 터치되므로 추가함.
+                drawerView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                });
+
                 linDrawerMain.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -831,36 +842,44 @@ public class MainActivity extends Activity {
                     }
                 });
 
-                UserFolderAdapter userFolderAdapter = new UserFolderAdapter();
+                userFolderAdapter = new UserFolderAdapter();
+                folders = new ArrayList<>();
 
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        folders = memoDao.getFolderAll();
+
+                        for (UserFolder folder : folders) {
+                            userFolderAdapter.addItem(folder);
+                        }
+                    }
+                }).start();
                 lvDrawerItem.setAdapter(userFolderAdapter);
-                for (UserFolder folder : folders) {
-                    userFolderAdapter.addItem(folder);
-                }
 
                 ivDrawerAddFolder.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Log.i("gugu", "폴더 추가");
+                        folderSetting(userFolderAdapter, memoDao, -1);
+                    }
+                });
 
-                        com.puresoftware.quickmemo.room.UserFolder folder = new UserFolder();
-                        folder.setTitle("             " + "새 폴더");
-                        folder.setTimestamp(System.currentTimeMillis());
-                        folder.setCount(0);
-                        userFolderAdapter.addItem(folder);
-                        userFolderAdapter.notifyDataSetChanged(); // 실시간으로 어댑터를 업데이트하라는 노티피케이션
-
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                memoDao.insertFolder(folder);
-
-                            }
-                        }).start();
+                lvDrawerItem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                     }
                 });
 
+                lvDrawerItem.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                    @Override
+                    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                        folderSetting(userFolderAdapter, memoDao, i);
+
+                        return true; // 숏 터치와 롱터치 구분하는것.
+                    }
+                });
             }
         });
 
@@ -908,6 +927,83 @@ public class MainActivity extends Activity {
             }
         }
     }
+
+    public void folderSetting(UserFolderAdapter adapter, MemoDao dao, int position) {
+
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_drawer_edit_folder, null);
+        EditText edtFolderTitle = dialogView.findViewById(R.id.edt_main_activity_drawer_folder_title);
+        TextView tvBtnFolderEdit = dialogView.findViewById(R.id.tv_main_actvitiy_drawer_folder_add);
+        TextView tvBtnFolderDelete = dialogView.findViewById(R.id.tv_main_actvitiy_drawer_folder_delete);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(dialogView);
+        Dialog dialog = builder.create();
+        dialog.show();
+
+        folder = new UserFolder();
+
+        // View에 내용 뿌리기
+        if (position > -1) {
+            folder = (UserFolder) adapter.getItem(position);
+            edtFolderTitle.setText(folder.getTitle());
+
+            Log.i(TAG, folder.toString());
+        }
+
+        // 추가 및 수정
+        tvBtnFolderEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (folder.title == null) { // add
+
+                    folder.setTitle(edtFolderTitle.getText().toString());
+                    folder.setTimestamp(System.currentTimeMillis());
+                    folder.setCount(0);
+                    adapter.addItem(folder);
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            dao.insertFolder(folder);
+                        }
+                    }).start();
+                    Log.i(TAG, "folderSettings Add");
+
+                } else { // updte
+                    folder.setTitle(edtFolderTitle.getText().toString());
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            dao.updateFolder(folder.title, folder.uid);
+                            // 업데이트폴더명을 바꾸면 업데이트할 메모명들도 다 바꾸고 업데이트 해야 함.
+                        }
+                    }).start();
+                    Log.i(TAG, "folderSettings Uptadte");
+                }
+                adapter.notifyDataSetChanged();
+                dialog.dismiss();
+            }
+        });
+
+        tvBtnFolderDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dao.deleteFolder(folder);
+                    }
+                }).start();
+                adapter.deleteItem(folder);
+                adapter.notifyDataSetChanged();
+                dialog.dismiss();
+
+                Log.i(TAG, "folderSettings delete touch");
+            }
+        });
+    }
+
 
     // 상단 카드들의(중요,최근 카드) Lock 여부를 확인하여 그에 맞는 장소로 이동하기.
     public void lockContentTop(Memo memo) {

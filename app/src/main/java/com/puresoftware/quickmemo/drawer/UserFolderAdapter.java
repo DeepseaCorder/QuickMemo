@@ -56,27 +56,31 @@ public class UserFolderAdapter extends BaseAdapter {
         tvDrawerUserTitle.setText(folder.getTitle());
         tvDrawerUserCount.setText(folder.getCount() + "");
 
-        linDrawerUserFolder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.i(TAG, "드로우어블 개인 폴더 터치됨");
-            }
-        });
+//        linDrawerUserFolder.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Log.i(TAG, "드로우어블 개인 폴더 터치됨");
+//            }
+//        });
 
-        linDrawerUserFolder.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                Log.i(TAG, "드로우어블 개인 폴더 롱 터치됨");
-
-
-                return true;
-            }
-        });
+//        linDrawerUserFolder.setOnLongClickListener(new View.OnLongClickListener() {
+//            @Override
+//            public boolean onLongClick(View view) {
+//                Log.i(TAG, "드로우어블 개인 폴더 롱 터치됨");
+//
+//
+//                return true;
+//            }
+//        });
 
         return view;
     }
 
     public void addItem(com.puresoftware.quickmemo.room.UserFolder folder) {
         folderList.add(folder);
+    }
+
+    public void deleteItem(UserFolder folder) {
+        folderList.remove(folder);
     }
 }
