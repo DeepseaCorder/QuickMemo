@@ -49,8 +49,8 @@ public interface MemoDao {
 //    @Query("UPDATE user set first_name=:first where uid=:uid")
 //    void updateFirstName(int uid, String first);
 
-    @Query("UPDATE Memo set title=:title,content=:content,star=:star,lock=:lock where timestamp=:timeStamp")
-    void updateData(String title, String content, boolean star, boolean lock, long timeStamp);
+    @Query("UPDATE Memo set title=:title,content=:content,star=:star,lock=:lock, folder=:folder where timestamp=:timeStamp")
+    void updateData(String title, String content, boolean star, boolean lock, long timeStamp, String folder);
 
     @Query("UPDATE Memo set trash=:isTransh where uid=:uid")
     void updateTrash(boolean isTransh, int uid);

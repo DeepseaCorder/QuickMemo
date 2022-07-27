@@ -146,7 +146,8 @@ public class EditActivity extends AppCompatActivity {
                             memo.lock = afterLock;
                             memo.star = afterStar;
                             memo.timestamp = beforeMemo.timestamp;
-                            memoDao.updateData(memo.title, memo.content, memo.star, memo.lock, memo.timestamp);
+                            memo.folder = beforeMemo.folder;
+                            memoDao.updateData(memo.title, memo.content, memo.star, memo.lock, memo.timestamp, memo.folder);
 
                             Log.i(TAG, "BeforeData:" + beforeMemo.toString() + '\n' + "↓ ↓ ↓ ↓ ↓");
                             Log.i(TAG, "AfterData:" + memo.toString());

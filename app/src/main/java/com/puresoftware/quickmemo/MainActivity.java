@@ -546,22 +546,13 @@ public class MainActivity extends Activity {
                         @Override
                         public void onClick(View view) {
 
+                            // https://youngest-programming.tistory.com/50
+                            // 선택된 포지션들을 폴더 액티비티로
                             Intent intent = new Intent(MainActivity.this, SelectFolderActivity.class);
+                            Bundle bundle = new Bundle(); // 직접 만든 배열 클래스가 아니라면, Bundle로 보내버리자.
+                            bundle.putStringArrayList("set", set);
+                            intent.putExtras(bundle);
                             startActivity(intent);
-
-                            // 할일일
-                            // set(string 값 포지션)
-                            // 메뉴 띄우기 (액티비티 or 다이어로그로 할 거임)
-                            // 액티비티가 나온다
-                            // 폴더를 선태한다.
-                            // 선택하면 데이터 업데이트 하고 finish 처리한다.
-                            // 폴더 선택하기
-                            // 반복문 실행
-                            // 선택하면 set의 폴더 가져오기
-                            // 폴더명 바꾸기
-                            // 업데트하기
-                            // 반복
-                            // 끝나면 제자리로.
 
                             // 어댑터(내부 클래스가 적당할 지도)
 

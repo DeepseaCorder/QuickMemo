@@ -28,8 +28,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
-                android:layout_marginBottom="2dp"
                 android:layout_marginRight="50dp"
+                android:layout_marginBottom="2dp"
                 android:background="@drawable/drawer_main" />
 
             <TextView
@@ -37,7 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="전체"
+                android:text="폴더 없음(코드수정해야 함)"
                 android:textColor="#DE000000"
                 android:textSize="16sp"
                 android:textStyle="bold" />

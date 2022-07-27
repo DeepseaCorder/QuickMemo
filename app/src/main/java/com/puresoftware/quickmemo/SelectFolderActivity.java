@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -33,6 +35,7 @@ public class SelectFolderActivity extends AppCompatActivity {
     List<UserFolder> folderList;
     UserFolder folder;
     List<Memo> memoList;
+    List<Memo> noneFolderList;
     List<Memo> starList;
     ArrayList setList;
 
@@ -60,19 +63,22 @@ public class SelectFolderActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
+
                 // 데이터 받기
                 folderList = memoDao.getFolderAll();
                 memoList = memoDao.getNotTrashAll(false);
 
-                // memoList 카운트
-                tvMainCount.setText(memoList.size() + "");
-
-                // starList 카운트
+                // 중요리스트,폴더없는 리스트 카운트
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     starList = new ArrayList<>();
                     starList = memoList.stream().filter(memo -> memo.star == true).collect(Collectors.toList());
+                    noneFolderList = new ArrayList<>();
+                    noneFolderList = memoList.stream().filter(memo -> memo.folder == null && memo.star == false).collect(Collectors.toList());
                 }
+
+                // view에 뿌리기
                 tvImpoCount.setText(starList.size() + "");
+                tvMainCount.setText(noneFolderList.size() + "");
 
                 // adapter에 아이템 넣기
                 adapter = new UserFolderAdapter();
@@ -85,8 +91,111 @@ public class SelectFolderActivity extends AppCompatActivity {
             }
         }).start();
 
-        // 인텐트된 포지션 데이터 가져오기
+        // 인텐트된 포지션 데이터 가져오기(오류가 너무 많아 Bundle로 하기)
         Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        setList = bundle.getStringArrayList("set");
+
+        for (int i = 0; i < setList.size(); i++) {
+            Log.i(TAG, "list:" + setList.get(i) + "");
+        }
+
+        // 폴더명 없애기.
+        linMainFolder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                setFolder(memoList, setList, folderList, memoDao, -2);
+
+                //// 백업코드
+//                for (int i = 0; i < setList.size(); i++) {
+//                    Memo updateMemo = memoList.get(Integer.parseInt((String) setList.get(i)));
+//                    updateMemo.folder = null; // 조건문 추가
+//
+//                    new Thread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            memoDao.updateData(updateMemo.title,
+//                                    updateMemo.content,
+//                                    updateMemo.star,
+//                                    updateMemo.lock,
+//                                    updateMemo.timestamp,
+//                                    updateMemo.folder);
+//                        }
+//                    }).start();
+//
+//                    Log.i(TAG, "folderUpdate " +
+//                            "title:" + updateMemo.title +
+//                            ",folder:" + updateMemo.folder +
+//                            ",posi:" + setList.get(i) + "");
+//                    finish();
+//                }
+            }
+        });
+
+        linImpoFolder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                setFolder(memoList, setList, folderList, memoDao, -1);
+            }
+        });
+
+        lvUserFolder.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                folder = folderList.get(i);
+
+                setFolder(memoList, setList, folderList, memoDao, i);
+            }
+        });
+    }
+
+    public void setFolder(List<Memo> memoList, ArrayList setList, List<UserFolder> folderList, MemoDao memoDao, int count) {
+
+        for (int i = 0; i < setList.size(); i++) {
+            Memo updateMemo = memoList.get(Integer.parseInt((String) setList.get(i)));
+
+            // 입력조건에 따른 폴더명이 변경됨
+            switch (count) {
+
+                // 메인 코드
+                case -2:
+                    updateMemo.folder = null; // 조건문 추가
+                    updateMemo.setStar(false);
+                    break;
+
+                // 중요 코드
+                case -1:
+                    updateMemo.folder = null;
+                    updateMemo.setStar(true);
+                    break;
+            }
+
+            // 유저 코드
+            if (count > -1) {
+                String name = folderList.get(count).title;
+                updateMemo.setFolder(name);
+            }
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    memoDao.updateData(updateMemo.title,
+                            updateMemo.content,
+                            updateMemo.star,
+                            updateMemo.lock,
+                            updateMemo.timestamp,
+                            updateMemo.folder);
+                }
+            }).start();
+
+            Log.i(TAG, "folderUpdate " +
+                    "title:" + updateMemo.title +
+                    ",folder:" + updateMemo.folder +
+                    ",posi:" + setList.get(i) + "");
+            finish();
+        }
     }
 
     @Override
