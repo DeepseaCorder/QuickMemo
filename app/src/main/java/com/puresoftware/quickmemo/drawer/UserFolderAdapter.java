@@ -50,6 +50,7 @@ public class UserFolderAdapter extends BaseAdapter {
         LinearLayout linDrawerUserFolder = view.findViewById(R.id.lin_main_drawer_user_folder);
         TextView tvDrawerUserTitle = view.findViewById(R.id.tv_main_drawer_user_title);
         TextView tvDrawerUserCount = view.findViewById(R.id.tv_main_drawer_user_count);
+        linDrawerUserFolder.setBackground(null);
 
         UserFolder folder = folderList.get(i);
 

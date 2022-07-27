@@ -9,8 +9,8 @@
         android:id="@+id/lin_main_drawer_user_folder"
         android:layout_width="match_parent"
         android:layout_height="42dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/round_retengle_folder"
         android:orientation="horizontal"
         android:paddingTop="10dp"
@@ -18,10 +18,10 @@
 
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_marginBottom="1dp"
-
+            android:layout_marginRight="50dp"
+            android:layout_marginBottom="2dp"
             android:background="@drawable/drawer_folder" />
 
         <TextView
@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:text="          메인"
+            android:text="A가곷a@"
             android:textColor="#DE000000"
             android:textSize="16sp"
             android:textStyle="bold" />

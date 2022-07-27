@@ -71,7 +71,7 @@ public class MainActivity extends Activity {
     LinearLayout linSelbar;
     TextView tvSelCount;
     ImageView imgbtnTrash;
-    ImageView imgbtnFunc;
+    ImageView imgbtnFolder;
     MainViewHolder holder;
 
     // main
@@ -171,7 +171,7 @@ public class MainActivity extends Activity {
         linSelbar = findViewById(R.id.lay_main_activity_sel_bar);
         tvSelCount = findViewById(R.id.tv_main_card_sel_count);
         imgbtnTrash = findViewById(R.id.btn_main_sel_trash);
-        imgbtnFunc = findViewById(R.id.btn_main_sel_func);
+        imgbtnFolder = findViewById(R.id.btn_main_sel_folder);
 
         // DrawerLayout 내 오브젝트
         tvDrawerTitle = drawerView.findViewById(R.id.tv_main_drawer_custom_ID);
@@ -541,6 +541,63 @@ public class MainActivity extends Activity {
                         Log.i(TAG, object + "아이템");
                     }
 
+                    // 폴더 이동 입력
+                    imgbtnFolder.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            Intent intent = new Intent(MainActivity.this, SelectFolderActivity.class);
+                            startActivity(intent);
+
+                            // 할일일
+                            // set(string 값 포지션)
+                            // 메뉴 띄우기 (액티비티 or 다이어로그로 할 거임)
+                            // 액티비티가 나온다
+                            // 폴더를 선태한다.
+                            // 선택하면 데이터 업데이트 하고 finish 처리한다.
+                            // 폴더 선택하기
+                            // 반복문 실행
+                            // 선택하면 set의 폴더 가져오기
+                            // 폴더명 바꾸기
+                            // 업데트하기
+                            // 반복
+                            // 끝나면 제자리로.
+
+                            // 어댑터(내부 클래스가 적당할 지도)
+
+//                            // 2022/07/19 - run 메소드내부 가독성좋게 리팩토링
+//                            deleteThread = new Thread(new Runnable() {
+//                                @Override
+//                                public void run() {
+//
+//                                    // 1) 삭제할 메모의 인덱스 탐색
+//                                    for (int i = 0; i < set.size(); i++) {
+//                                        Memo deleteMemo = memos.get(Integer.parseInt(set.get(i))); // 선택된 메모의 포지션 가져오기.
+//
+//
+//                                        // 2) 휴지통으로 이동하는 로직
+//                                        memoDao.updateTrash(true, deleteMemo.getUid());
+//                                    }
+//                                    Log.i("gugu", "삭제완료");
+//
+//
+//                                    // 3) memoDaoThread start하기
+//                                    new Thread(new Runnable() {
+//                                        @Override
+//                                        public void run() {
+//                                            memos = memoDao.getNotTrashAll(false);
+//
+//                                            // 배포할 때에는 이 코드 끄기.
+//                                            for (Memo memo : memos) {
+//                                                Log.i(TAG, "memoDatas:" + memo.toString());
+//                                            }
+//                                        }
+//                                    }).start();
+//
+
+                        }
+                    });
+
                     // 입력모드 2개인 폴더 이동과 삭제.
                     imgbtnTrash.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -790,7 +847,10 @@ public class MainActivity extends Activity {
                 btnDrawerSettings.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+
+                        // 폴더 선택하는 액티비티 감
                         Intent intent = new Intent(MainActivity.this, AppSettingsActivity.class);
+                        intent.putStringArrayListExtra("set", set);
                         startActivity(intent);
                     }
                 });
@@ -812,6 +872,10 @@ public class MainActivity extends Activity {
                         }
                     }
                 }).start();
+
+                linDrawerMain.setBackgroundResource(R.drawable.round_retengle_main);
+                linDrawerImpo.setBackground(null);
+                linDrawerTrash.setBackground(null);
 
                 // 드로우어블 뒤의 모든게 터치되므로 추가함.
                 drawerView.setOnClickListener(new View.OnClickListener() {
@@ -930,33 +994,49 @@ public class MainActivity extends Activity {
 
     public void folderSetting(UserFolderAdapter adapter, MemoDao dao, int position) {
 
-        View dialogView = getLayoutInflater().inflate(R.layout.dialog_drawer_edit_folder, null);
-        EditText edtFolderTitle = dialogView.findViewById(R.id.edt_main_activity_drawer_folder_title);
-        TextView tvBtnFolderEdit = dialogView.findViewById(R.id.tv_main_actvitiy_drawer_folder_add);
-        TextView tvBtnFolderDelete = dialogView.findViewById(R.id.tv_main_actvitiy_drawer_folder_delete);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_drawer_edit_folder, null); // 다이얼그
+        EditText edtFolderTitle = dialogView.findViewById(R.id.edt_main_activity_drawer_folder_title); // 제목
+        TextView tvBtnFolderEdit = dialogView.findViewById(R.id.tv_main_actvitiy_drawer_folder_add); // 수정,추가
+        TextView tvBtnFolderDelete = dialogView.findViewById(R.id.tv_main_actvitiy_drawer_folder_delete); // 삭제
+        LinearLayout vMarginRight = dialogView.findViewById(R.id.v_drawer_dialog_margin_right); // 삭제 버튼에 있는 빈 공백
 
+        // 다이어로그 생성
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(dialogView);
         Dialog dialog = builder.create();
         dialog.show();
 
-        folder = new UserFolder();
+        folder = new UserFolder(); // 폴더 초기화
 
         // View에 내용 뿌리기
         if (position > -1) {
+
+            // 아이템이 있다면 수정,삭제 모드
+            tvBtnFolderDelete.setVisibility(View.VISIBLE);
+            tvBtnFolderEdit.setText("수정");
+            vMarginRight.setVisibility(View.VISIBLE);
+
+            // 포지션 데이터 받고 뷰에 뿌리기
             folder = (UserFolder) adapter.getItem(position);
             edtFolderTitle.setText(folder.getTitle());
+        } else {
 
-            Log.i(TAG, folder.toString());
+            // 아이템이 없다면 추가 모드
+            tvBtnFolderDelete.setVisibility(View.GONE);
+            tvBtnFolderEdit.setText("추가");
+            vMarginRight.setVisibility(View.GONE);
         }
+        Log.i(TAG, folder.toString());
 
         // 추가 및 수정
         tvBtnFolderEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if (folder.title == null) { // add
+                // add
+                if (folder.title == null) {
 
+                    // add면 새 데이터 넣는다.
                     folder.setTitle(edtFolderTitle.getText().toString());
                     folder.setTimestamp(System.currentTimeMillis());
                     folder.setCount(0);
@@ -969,7 +1049,10 @@ public class MainActivity extends Activity {
                     }).start();
                     Log.i(TAG, "folderSettings Add");
 
-                } else { // updte
+                    // updte
+                } else {
+
+                    // update면 dao 수정.
                     folder.setTitle(edtFolderTitle.getText().toString());
                     new Thread(new Runnable() {
                         @Override
@@ -980,22 +1063,28 @@ public class MainActivity extends Activity {
                     }).start();
                     Log.i(TAG, "folderSettings Uptadte");
                 }
+
+                // 어댑터 업데이트. 사실 잘 되는 지 모름.
                 adapter.notifyDataSetChanged();
                 dialog.dismiss();
             }
         });
 
+        // delete
         tvBtnFolderDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+                // delete면 dao 삭제.
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         dao.deleteFolder(folder);
                     }
                 }).start();
-                adapter.deleteItem(folder);
+
+                // 업데이트. 삭제는 인식을 받지 않아 어댑터 내의 데이터를 삭제.
+                adapter.deleteItem(folder); // 어댑터 데이터 삭제
                 adapter.notifyDataSetChanged();
                 dialog.dismiss();
 
@@ -1003,7 +1092,6 @@ public class MainActivity extends Activity {
             }
         });
     }
-
 
     // 상단 카드들의(중요,최근 카드) Lock 여부를 확인하여 그에 맞는 장소로 이동하기.
     public void lockContentTop(Memo memo) {
