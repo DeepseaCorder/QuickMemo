@@ -32,12 +32,12 @@ public class SelectFolderActivity extends AppCompatActivity {
     ListView lvUserFolder;
 
     UserFolderAdapter adapter;
-    List<UserFolder> folderList;
-    UserFolder folder;
-    List<Memo> memoList;
-    List<Memo> noneFolderList;
-    List<Memo> starList;
-    ArrayList setList;
+    List<UserFolder> folderList; // 전체 폴더
+    UserFolder folder; // 선택한 폴더
+    List<Memo> memoList; // 전체 메모
+    ArrayList<String> setList = new ArrayList<>(); // 선택한 메모 카운트
+    List<Memo> noneFolderList; // 폴더 없는 리스트(View 뿌리기 전용)
+    List<Memo> starList; // 중요 폴더(View 뿌리기 전용)
 
     String TAG = SelectFolderActivity.class.getSimpleName();
 
@@ -145,7 +145,6 @@ public class SelectFolderActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 folder = folderList.get(i);
-
                 setFolder(memoList, setList, folderList, memoDao, i);
             }
         });
@@ -153,49 +152,75 @@ public class SelectFolderActivity extends AppCompatActivity {
 
     public void setFolder(List<Memo> memoList, ArrayList setList, List<UserFolder> folderList, MemoDao memoDao, int count) {
 
-        for (int i = 0; i < setList.size(); i++) {
+        for (int i = 0; i < setList.size(); i++) { // 0,1,2,3
             Memo updateMemo = memoList.get(Integer.parseInt((String) setList.get(i)));
+            Memo beforeMemo = memoList.get(Integer.parseInt((String) setList.get(i)));
 
-            // 입력조건에 따른 폴더명이 변경됨
+            // 입력조건에 따른 폴더명이 변경됨(업데이트 라인)
             switch (count) {
-
                 // 메인 코드
                 case -2:
                     updateMemo.folder = null; // 조건문 추가
-                    updateMemo.setStar(false);
+                    updateMemo.star = false;
                     break;
 
                 // 중요 코드
                 case -1:
                     updateMemo.folder = null;
-                    updateMemo.setStar(true);
+                    updateMemo.star = true;
                     break;
             }
-
             // 유저 코드
             if (count > -1) {
-                String name = folderList.get(count).title;
-                updateMemo.setFolder(name);
+                String name = folderList.get(count).title; // 전체폴더에서 내가 선택한 폴더의 이름.
+                updateMemo.setFolder(name); // 그 이름을 업데이트
             }
 
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    memoDao.updateData(updateMemo.title,
-                            updateMemo.content,
-                            updateMemo.star,
-                            updateMemo.lock,
-                            updateMemo.timestamp,
-                            updateMemo.folder);
+//                    memoDao.updateData(updateMemo.title,
+//                            updateMemo.content,
+//                            updateMemo.star,
+//                            updateMemo.lock,
+//                            updateMemo.timestamp,
+//                            updateMemo.folder);
+                    memoDao.updateStar(updateMemo.star, updateMemo.uid);
+
+
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//                        List<Memo> updateList = memoList.stream().filter(memo -> memo.folder.equals(updateMemo.folder)).collect(Collectors.toList());
+//                        List<Memo> beforeList = memoList.stream().filter(memo -> memo.folder.equals(updateMemo.folder)).collect(Collectors.toList());
+//
+//                        if (beforeList.equals(beforeMemo.folder)) {
+//                        }
+//
+//                        memoDao.updateFolderCount(updateList.size(), folder.uid);
+//                    }
+
                 }
             }).start();
 
-            Log.i(TAG, "folderUpdate " +
+            Log.i("gugu", "folderUpdate " +
                     "title:" + updateMemo.title +
                     ",folder:" + updateMemo.folder +
-                    ",posi:" + setList.get(i) + "");
-            finish();
+                    ",posi:" + setList.get(i) +
+                    ",star:" + updateMemo.star);
         }
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                // 체인지,업데이트
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//                    updateList = new ArrayList<>();
+//                    updateList = memoList.stream().filter(memo -> memo.folder.equals(updateMemo.folder)).collect(Collectors.toList());
+//                    memoDao.updateFolderCount(updateList.size(), folder.uid);
+//                }
+//            }
+//        }).start();
+        Intent intent = new Intent(SelectFolderActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override

@@ -49,17 +49,23 @@ public interface MemoDao {
 //    @Query("UPDATE user set first_name=:first where uid=:uid")
 //    void updateFirstName(int uid, String first);
 
-    @Query("UPDATE Memo set title=:title,content=:content,star=:star,lock=:lock, folder=:folder where timestamp=:timeStamp")
-    void updateData(String title, String content, boolean star, boolean lock, long timeStamp, String folder);
+    @Query("UPDATE Memo set title=:title,content=:content,star=:star,lock=:lock, folder=:folder where timestamp=:timestamp")
+    void updateData(String title, String content, boolean star, boolean lock, long timestamp, String folder);
 
     @Query("UPDATE Memo set trash=:isTransh where uid=:uid")
     void updateTrash(boolean isTransh, int uid);
+
+    @Query("UPDATE Memo set star=:star where uid=:uid")
+    void updateStar(boolean star, int uid);
 
     @Insert
     void insertFolder(UserFolder userFolder);
 
     @Query("UPDATE UserFolder set title=:title where uid=:uid")
     void updateFolder(String title, int uid);
+
+    @Query("UPDATE UserFolder set count=:count where uid=:uid")
+    void updateFolderCount(int count, int uid);
 
     @Delete
     void deleteFolder(UserFolder userFolder);
