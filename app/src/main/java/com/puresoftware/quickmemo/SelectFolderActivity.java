@@ -20,6 +20,7 @@ import com.puresoftware.quickmemo.room.UserFolder;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,6 +41,9 @@ public class SelectFolderActivity extends AppCompatActivity {
     List<Memo> starList; // 중요 폴더(View 뿌리기 전용)
 
     String TAG = SelectFolderActivity.class.getSimpleName();
+
+    int beforeCount = -99;
+    int beforeUid = -99;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +109,7 @@ public class SelectFolderActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                setFolder(memoList, setList, folderList, memoDao, -2);
+//                setFolder(memoList, setList, folderList, memoDao, -2);
 
                 //// 백업코드
 //                for (int i = 0; i < setList.size(); i++) {
@@ -137,7 +141,7 @@ public class SelectFolderActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                setFolder(memoList, setList, folderList, memoDao, -1);
+//                setFolder(memoList, setList, folderList, memoDao, -1);
             }
         });
 
@@ -145,68 +149,154 @@ public class SelectFolderActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 folder = folderList.get(i);
-                setFolder(memoList, setList, folderList, memoDao, i);
+
+                Log.i(TAG, "userFolderIndex: " + i);
+
+                // memoList: 전체
+                // setList: 선택한메모 인덱스들
+                for(int j=0; j<setList.size(); j++) {
+                    Log.i(TAG, "선택한 메모인덱스: " + j);
+
+                    Memo m = memoList.get(Integer.parseInt((String) setList.get(j)));
+                    Log.i(TAG, "선택한메모: " + m);
+
+                }
+                setFolder(memoList, setList, memoDao, folder, i);
             }
         });
     }
 
-    public void setFolder(List<Memo> memoList, ArrayList setList, List<UserFolder> folderList, MemoDao memoDao, int count) {
+    public void setFolder(List<Memo> memoList, ArrayList setList, MemoDao memoDao, UserFolder folder, int index) {
 
+        // folder: 선택한폴더 (새로운 폴더)
+        // old_folder: 기존에 메모가 저장된 폴더
+
+        int moveSize = setList.size();
+        ArrayList<Integer> beforeUids = new ArrayList<>();
+        ArrayList<Integer> beforeCounts = new ArrayList<>();
         for (int i = 0; i < setList.size(); i++) { // 0,1,2,3
             Memo updateMemo = memoList.get(Integer.parseInt((String) setList.get(i)));
-            Memo beforeMemo = memoList.get(Integer.parseInt((String) setList.get(i)));
+            UserFolder oldFolder = null;
+
+            Log.i(TAG, "memo: " + updateMemo.toString());
 
             // 입력조건에 따른 폴더명이 변경됨(업데이트 라인)
-            switch (count) {
-                // 메인 코드
+            switch (index) {
+                // 메인 폴더 인덱스
                 case -2:
                     updateMemo.folder = null; // 조건문 추가
                     updateMemo.star = false;
                     break;
 
-                // 중요 코드
+                // 중요 폴더 인덱스
                 case -1:
                     updateMemo.folder = null;
                     updateMemo.star = true;
                     break;
             }
-            // 유저 코드
-            if (count > -1) {
-                String name = folderList.get(count).title; // 전체폴더에서 내가 선택한 폴더의 이름.
-                updateMemo.setFolder(name); // 그 이름을 업데이트
+            // 유저 폴더 인덱스는 0부터 시작함
+            // 예를들어 aaaa는 0, bbbb는 1
+
+
+            // 기존의 폴더 카운트, uid알아오기
+
+
+            if (index > 0) {
+                // 기존의 폴더 인덱스를 구하면 끝
+                for (int k = 0; k < folderList.size(); k++) {
+                    if (folderList.get(k).title.equals(updateMemo.folder)) {
+                        oldFolder = folderList.get(k);
+                        break;
+                    }
+                }
             }
 
+            if (oldFolder != null) {
+
+                beforeCount = oldFolder.count;
+                beforeUid = oldFolder.uid;
+
+                beforeCounts.add(beforeCount);
+                beforeUids.add(beforeUid);
+
+
+                Log.i(TAG, "beforeCount: " + beforeCount);
+                Log.i(TAG, "beforeuid: " + beforeUid);
+            }
+
+
+
+            if (index > -1) {
+                String name = folder.title; // 전체폴더에서 내가 선택한 폴더의 이름.
+                updateMemo.setFolder(name); // 그 이름을 업데이트
+            }
+            Log.i(TAG, "--------------finally updated memo info----------------");
+            Log.i(TAG, "updatedMemo: " + updateMemo.toString());
+            Log.i(TAG, "------------------------------------------------------");
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-//                    memoDao.updateData(updateMemo.title,
-//                            updateMemo.content,
-//                            updateMemo.star,
-//                            updateMemo.lock,
-//                            updateMemo.timestamp,
-//                            updateMemo.folder);
-                    memoDao.updateStar(updateMemo.star, updateMemo.uid);
-
-
-//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//                        List<Memo> updateList = memoList.stream().filter(memo -> memo.folder.equals(updateMemo.folder)).collect(Collectors.toList());
-//                        List<Memo> beforeList = memoList.stream().filter(memo -> memo.folder.equals(updateMemo.folder)).collect(Collectors.toList());
-//
-//                        if (beforeList.equals(beforeMemo.folder)) {
-//                        }
-//
-//                        memoDao.updateFolderCount(updateList.size(), folder.uid);
-//                    }
+                    // ok
+                    memoDao.updateData(updateMemo.title,
+                            updateMemo.content,
+                            updateMemo.star,
+                            updateMemo.lock,
+                            updateMemo.timestamp,
+                            updateMemo.folder);
 
                 }
             }).start();
-
-            Log.i("gugu", "folderUpdate " +
-                    "title:" + updateMemo.title +
-                    ",folder:" + updateMemo.folder +
-                    ",posi:" + setList.get(i) +
-                    ",star:" + updateMemo.star);
         }
+
+
+        // 개수 증가 (새로운폴더)
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //                    memoDao.updateFolderCount(folder.count+moveCount, folder.uid);
+//                    Log.i(TAG, "afterCount: "+ (folder.count+moveCount)+"");
+
+                memoDao.updateFolderCount(folder.count + moveSize, folder.uid);
+            }
+        }).start();
+
+        // 개수 감소 (기존 폴더들)
+
+        // newDatas안에 같은 uid가 몇개인지
+        HashMap<Integer, Integer> newDatas = new HashMap<>();
+        HashMap<Integer, Integer> sameUidCounts = new HashMap<>();
+        for(int i=0; i<beforeUids.size(); i++) {
+            int tempBeforeUid = beforeUids.get(i);
+
+            sameUidCounts.put(tempBeforeUid, sameUidCounts.get(tempBeforeUid)+1);
+
+            int tempCountSum = 0;
+            for(int j=0; j<beforeCounts.size(); j++) {
+                int tempBeforeCount = beforeCounts.get(j);
+                tempCountSum += tempBeforeCount;
+            }
+
+            newDatas.put(tempBeforeUid, tempCountSum);
+        }
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for(int i=0; i<beforeUids.size(); i++) {
+                    int tempBeforeUid = beforeUids.get(i);
+
+                    int beforeFolderCount = newDatas.get(tempBeforeUid);
+
+                    // uid별로 몇개인지
+                    memoDao.updateFolderCount(beforeFolderCount-sameUidCounts.get(tempBeforeUid),beforeUid);
+                }
+
+            }
+        }).start();
+
+
+
+        // adapter에 아이템 넣기
 //        new Thread(new Runnable() {
 //            @Override
 //            public void run() {

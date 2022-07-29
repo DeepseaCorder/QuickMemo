@@ -54,6 +54,8 @@ public class UserFolderAdapter extends BaseAdapter {
 
         UserFolder folder = folderList.get(i);
 
+
+
         tvDrawerUserTitle.setText(folder.getTitle());
         tvDrawerUserCount.setText(folder.getCount() + "");
 
@@ -79,6 +81,11 @@ public class UserFolderAdapter extends BaseAdapter {
 
     public void addItem(com.puresoftware.quickmemo.room.UserFolder folder) {
         folderList.add(folder);
+    }
+
+    // 리스트 비우기
+    public void cleanItems() {
+        folderList.clear();
     }
 
     public void deleteItem(UserFolder folder) {
